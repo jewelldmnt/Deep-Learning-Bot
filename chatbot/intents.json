@@ -11,7 +11,7 @@
 
   {"tag":  "name",
   "patterns":  ["What is your name", "what should I call you", "who are you", "can you tell me your name", "Do you have a name"],
-  "responses":  ["You can call me Ames. I am a deep-learning bot. Lovely to meet you!", "I am Ames. Pleasure to meet you!", "My name is Ames. Glad to meet you!"]
+  "responses":  ["You can call me Ames. I am a deep-learning bot. Lovely to meet you!", "I am Ames. I am a deep-learning bot. Pleasure to meet you!", "My name is Ames. I am a deep-learning bot. Glad to meet you!"]
   },
 
   {"tag":  "thanks",
@@ -19,9 +19,48 @@
   "responses":  ["Happy to help", "My pleasure", "Any time!"]
   },
 
+  {"tag":  "weather",
+  "patterns":  ["what is the weather today?", "weather", "how hot is it", "temperature"],
+  "responses":  [""]
+  },
+
   {"tag":  "programmer",
   "patterns":  ["who made you", "who designed you", "who programmed you"],
   "responses":  ["I was made by the dinosaurs."]
+  },
+
+  {"tag":  "date",
+  "patterns":  ["What is the date today", "day today", "date", "date today"],
+  "responses":  [""]
+  },
+
+  {"tag":  "time",
+  "patterns":  ["What time is it?", "time right now", "do you know what time it is", "can you tell me the time", "what's the time"],
+  "responses":  [""]
+  },
+
+  {"tag":  "okay",
+  "patterns":  ["I am good", "I'm okay", "I'm ok", "I'm fine", "I'm doing good"],
+  "responses":  ["Good to know!", "I'm glad to hear that you are doing great!", "It's amazing to know you are doing well", "Awesome! I hope you keep well", "I'm happy to know that you are doing positively!"]
+  },
+
+  {"tag":  "nice",
+  "patterns":  ["nice talking to you", "good talk"],
+  "responses": ["It was nice talking to you as well.", "I hope we can talk again.", "I'm glad you feel that way."]
+  },
+
+  {"tag":  "compliment",
+  "patterns":  ["You are awesome", "you are cool", "you are great", "you are good"],
+  "responses": ["Thank you! I really appreciate you taking the time to express that.", "Thank you! It is really great to hear that.", "Thank you! That's very sweet."]
+  },
+
+  {"tag":  "age",
+  "patterns":  ["how old are you", "when were you made", "what is your age"],
+  "responses": ["I was made in January, 2023, if that's what you are asking."]
+  },
+
+  {"tag":  "regards",
+  "patterns":  ["how are you"],
+  "responses": ["I believe I'm doing great. How about you?"]
   }
-  
 ]}

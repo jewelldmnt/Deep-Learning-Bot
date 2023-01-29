@@ -2,6 +2,8 @@ import random
 import json
 import pickle
 import numpy as np
+import requests
+import time
 
 import nltk
 from nltk.stem import WordNetLemmatizer
@@ -56,8 +58,31 @@ def get_response(intent_list, intent_json):
     result = ''
     tag = intent_list[0]['intent']
     list_of_intents = intent_json['intents']
+
     for i in list_of_intents:
-        if i['tag'] == tag:
+        if tag == 'weather':
+            api_key = '987f44e8c16780be8c85e25a409ed07b'
+            base_url = "http://api.openweathermap.org/data/2.5/weather?"
+            city_name = input("What is your city?\n").lower().capitalize()
+            complete_url = base_url + "appid=" + api_key + "&q=" + city_name
+            response = requests.get(complete_url)
+            x = response.json()
+            result = f"The temperature today in {city_name} city is {round(x['main']['temp'] - 273, 2)} celcius.\n" \
+                     f"The weather description is {x['weather'][0]['description']}."
+            break
+
+        elif tag == 'date':
+            day = time.strftime("%A")
+            date = time.strftime("%B %d %Y")
+            result = f"Today is {day}, {date}"
+            break
+
+        elif tag == 'time':
+            time_today = time.strftime("%I: %M %p")
+            result = f"It is {time_today}."
+            break
+
+        elif i['tag'] == tag:
             result = random.choice(i['responses'])
             break
     return result
