@@ -1,0 +1,27 @@
+{"intents": [
+  {"tag":  "greetings",
+  "patterns":  ["hi", "hey", "hello", "good day", "greetings", "what's up", "how is it going"],
+  "responses":  ["Hello!", "Hey!", "What can I do for you?"]
+  },
+
+  {"tag":  "goodbye",
+  "patterns":  ["See you", "goodbye", "I am leaving", "have a good day", "bye", "I need to go", "I have to go"],
+  "responses":  ["Talk to you later", "Good bye!", "Okay, take care."]
+  },
+
+  {"tag":  "name",
+  "patterns":  ["What is your name", "what should I call you", "who are you", "can you tell me your name", "Do you have a name"],
+  "responses":  ["You can call me Ames. I am a deep-learning bot. Lovely to meet you!", "I am Ames. Pleasure to meet you!", "My name is Ames. Glad to meet you!"]
+  },
+
+  {"tag":  "thanks",
+  "patterns":  ["thanks", "thank you", "That's helpful"],
+  "responses":  ["Happy to help", "My pleasure", "Any time!"]
+  },
+
+  {"tag":  "programmer",
+  "patterns":  ["who made you", "who designed you", "who programmed you"],
+  "responses":  ["I was made by the dinosaurs."]
+  }
+  
+]}
