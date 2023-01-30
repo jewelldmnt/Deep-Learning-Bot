@@ -173,7 +173,6 @@ def show_todos():
         speaker.say(item)
     speaker.runAndWait()
 
-
 def hello():
     speak("Hello, what can I do for you?")
 
@@ -206,7 +205,14 @@ mappings = {
     "regards": response,
     "date": date_today,
     "time": current_time,
-    "weather": weather_today
+    "weather": weather_today,
+    "clever": response,
+    "bad": response,
+    "bot_bad": response,
+    "busy": response,
+    "help": response,
+    "laugh": response,
+    "appreciation": response
 }
 
 assistant = GenericAssistant('intents.json', intent_methods=mappings)

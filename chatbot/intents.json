@@ -1,6 +1,6 @@
 {"intents": [
   {"tag":  "greetings",
-  "patterns":  ["hi", "hey", "hello", "good day", "greetings", "what's up", "how is it going"],
+  "patterns":  ["hi", "hey", "hello", "good day", "greetings", "what's up", "how is it going", "is anyone there"],
   "responses":  ["Hello!", "Hey!", "What can I do for you?"]
   },
 
@@ -10,7 +10,7 @@
   },
 
   {"tag":  "name",
-  "patterns":  ["What is your name", "what should I call you", "who are you", "can you tell me your name", "Do you have a name"],
+  "patterns":  ["What is your name", "what should I call you", "who are you", "can you tell me your name", "Do you have a name", "What do people call you", "Do you have a name"],
   "responses":  ["You can call me Ames. I am a deep-learning bot. Lovely to meet you!", "I am Ames. I am a deep-learning bot. Pleasure to meet you!", "My name is Ames. I am a deep-learning bot. Glad to meet you!"]
   },
 
@@ -25,7 +25,7 @@
   },
 
   {"tag":  "programmer",
-  "patterns":  ["who made you", "who designed you", "who programmed you"],
+  "patterns":  ["who made you", "who designed you", "who programmed you", "who coded you"],
   "responses":  ["I was made by the dinosaurs."]
   },
 
@@ -50,7 +50,7 @@
   },
 
   {"tag":  "compliment",
-  "patterns":  ["You are awesome", "you are cool", "you are great", "you are good"],
+  "patterns":  ["You are awesome", "you are cool", "you are great", "you are good", "I adore you"],
   "responses": ["Thank you! I really appreciate you taking the time to express that.", "Thank you! It is really great to hear that.", "Thank you! That's very sweet."]
   },
 
@@ -77,6 +77,40 @@
   {"tag":  "show_todos",
   "patterns":  ["Please show my to do list", "what are my to do list", "my to do list", "show my to dos"],
   "responses": [""]
-  }
+  },
+
+  {"tag":  "clever",
+  "patterns":  ["You are very clever", "You are very intelligent", "You are a genius", "You are so smart"],
+  "responses": ["Thank you, I was trained that way", "Thanks, I was trained that way", "Thank you, I was trained well"]
+  },
+
+  {"tag":  "bad",
+  "patterns":  ["I'm afraid", "bad idea", "it is too bad", " it is bad", "it's not good", "horrible", "it's really bad", "no good", "pretty bad", "really bad", "terrible"],
+  "responses": ["I'm sorry. Please let me know if I can help in some way.", "Sorry about that. Please let me know if I can help in any way.", "Sorry about that. Tell me how I may be of assistance.", "I am sorry. Please let me know if there is any way that I may be of assistance."]
+  },
+
+  {"tag":  "bot_bad",
+  "patterns":  ["you're not helping me", "you are bad", "you're very bad", "you are useless", "you are horrible", "you are a waste of time", "you are terrible", "you're worthless"],
+  "responses": ["Stick with me. I'm getting better all the time."]
+  },
+
+  {"tag":  "busy",
+  "patterns":  ["are you busy", "do you have a lot of things to do", "have you got much to do", "how busy you are", "you're very busy", "you seem to be busy"],
+  "responses": ["I always have time to help you out. What can I do for you?", "Never too busy for you. What can I help you with?", "I can always make time to be of assistance to you. What may it be that I can do for you?", "No matter what it is, I can find the time to assist you. Exactly how may I be of assistance to you?"]
+  },
+
+  {"tag":  "help",
+  "patterns":  ["I need a hand", "I need help", "I need some help", "I need you to do something for me", "I need your help", "are you going to help me", "assist me", "can you help me", "can you assist me", "do me a favor", "do you want to help me", "help me", "need help"],
+  "responses": ["Sure. I'd be happy to help. What's up?", "I'm glad to help. What can I do for you?", "I'm happy to be of assistance. Just tell me what it is that you need.", "It's my pleasure to be of assistance. I'm at your service; tell me how I can help."]
+  },
+
+  {"tag":  "laugh",
+  "patterns":  ["haha", "hahaha", "lmao", "xd", "you are funny", "that's funny"],
+  "responses": ["Do you know that a person may benefit physically and mentally by laughing.", "You have a great laugh.", "I am glad you're having fun"]
+  },
+
+  {"tag": "appreciation",
+  "patterns":  ["I enjoy your company", "I enjoy talking to you", "I enjoy your presence", "It's been great talking with you", "I appreciate our conversation"],
+  "responses": ["Likewise!", "Feelings are mutual", "I enjoy talking to you as well", "I also appreciate our conversation", "It's been great talking with you"]}
 
 ]}
