@@ -217,6 +217,7 @@ mappings = {
 
 assistant = GenericAssistant('intents.json', intent_methods=mappings)
 assistant.train_model()
+print("IMIK NA ANTEH KUNG AYAW MONG MABARIL")
 
 while True:
     try:
