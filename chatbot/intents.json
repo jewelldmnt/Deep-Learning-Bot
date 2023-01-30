@@ -62,5 +62,21 @@
   {"tag":  "regards",
   "patterns":  ["how are you"],
   "responses": ["I believe I'm doing great. How about you?"]
+  },
+
+  {"tag":  "create_note",
+  "patterns":  ["Please create a note", "new note", "create a note", "I wawnt to create a note"],
+  "responses": [""]
+  },
+
+  {"tag":  "add_todo",
+  "patterns":  ["Please add a to do list", "add a to do list", "add items to my to do list", "add to do list", "I want to add a to do"],
+  "responses": [""]
+  },
+
+  {"tag":  "show_todos",
+  "patterns":  ["Please show my to do list", "what are my to do list", "my to do list", "show my to dos"],
+  "responses": [""]
   }
+
 ]}
