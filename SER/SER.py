@@ -1,16 +1,50 @@
-import librosa
-import soundfile
-import os, glob, pickle
 import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.neural_network import MLPClassifier
-from sklearn.metrics import accuracy_score
-import pandas as pd
+import librosa.display
+import joblib
+import pyaudio
+import wave
+import soundfile
 
+# load the pre-trained model for emotion recognition
+model = joblib.load('emotion_recognition_model.h5')
 
-# DataFlair - Extract features (mfcc, chroma, mel) from a sound file
-def extract_feature(file_name, mfcc, chroma, mel):
-    with soundfile.SoundFile(file_name) as sound_file:
+# function to record live audio
+def record_audio(filename):
+    duration = 5  # in seconds
+    sample_rate = 44100
+    channels = 1
+    # Set up the PyAudio object
+    p = pyaudio.PyAudio()
+    stream = p.open(format=pyaudio.paInt16,
+                    channels=channels,
+                    rate=sample_rate,
+                    input=True,
+                    frames_per_buffer=1024)
+
+    # Start recording
+    print("Imik na anteh...")
+    frames = []
+    for i in range(0, int(sample_rate / 1024 * duration)):
+        data = stream.read(1024)
+        frames.append(data)
+    print("Oh shh awat na, ingay.")
+
+    # Stop the stream and close the PyAudio object
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
+
+    # Write the recorded audio data to a WAV file
+    wave_file = wave.open(filename, "wb")
+    wave_file.setnchannels(channels)
+    wave_file.setsampwidth(p.get_sample_size(pyaudio.paInt16))
+    wave_file.setframerate(sample_rate)
+    wave_file.writeframes(b"".join(frames))
+    wave_file.close()
+
+# function to extract 180 features
+def extract_feature(filename, mfcc, chroma, mel):
+    with soundfile.SoundFile(filename) as sound_file:
         X = sound_file.read(dtype="float32")
         sample_rate = sound_file.samplerate
         if chroma:
@@ -27,61 +61,18 @@ def extract_feature(file_name, mfcc, chroma, mel):
             result = np.hstack((result, mel))
     return result
 
-
-# DataFlair - Emotions in the RAVDESS dataset
-emotions = {
-    '01': 'neutral',
-    '02': 'calm',
-    '03': 'happy',
-    '04': 'sad',
-    '05': 'angry',
-    '06': 'fearful',
-    '07': 'disgust',
-    '08': 'surprised'
-}
-
-# DataFlair - Emotions to observe
-observed_emotions = ['calm', 'happy', 'fearful', 'disgust', 'neutral', 'sad', 'angry', 'surprised']
+# Predict the emotion of the audio file
+def predict_emotion(filename):
+    features = extract_feature(filename, mfcc=True, chroma=True, mel=True)
+    prediction = model.predict([features])[0]
+    return prediction
 
 
-# DataFlair - Load the data and extract features for each sound file
-def load_data(test_size=0.2):
-    x, y = [], []
-    for file in glob.glob("./ravdess-data/Actor_*/*.wav"):
-        file_name = os.path.basename(file)
-        emotion = emotions[file_name.split("-")[2]]
-        if emotion not in observed_emotions:
-            continue
-        feature = extract_feature(file, mfcc=True, chroma=True, mel=True)
-        x.append(feature)
-        y.append(emotion)
-    return train_test_split(np.array(x), y, test_size=test_size, random_state=9)
+if __name__ == "__main__":
+    # live audio is saved in output.wav
+    file_name = "output.wav"
+    record_audio(file_name)
 
-
-# DataFlair - Split the dataset
-x_train, x_test, y_train, y_test = load_data(test_size=0.25)
-
-# DataFlair - Get the shape of the training and testing datasets
-print((x_train.shape[0], x_test.shape[0]))
-
-# DataFlair - Get the number of features extracted
-print(f'Features extracted: {x_train.shape[1]}')
-
-# DataFlair - Initialize the Multi Layer Perceptron Classifier
-model = MLPClassifier(alpha=0.01, batch_size=256, epsilon=1e-08, hidden_layer_sizes=(300,), learning_rate='adaptive',
-                      max_iter=500)
-
-# DataFlair - Train the model
-model.fit(x_train, y_train)
-
-# DataFlair - Predict for the test set
-y_pred = model.predict(x_test)
-
-# DataFlair - Calculate the accuracy of our model
-accuracy = accuracy_score(y_true=y_test, y_pred=y_pred)
-
-# DataFlair - Print the accuracy
-print("Accuracy: {:.2f}%".format(accuracy * 100))
-
-df = pd.DataFrame({'Actual': y_test, 'Predicted': y_pred})
-print(df.head(20))
+    # Use the predict_emotion function on an audio file
+    predicted_emotion = predict_emotion(file_name)
+    print("The predicted emotion is:", predicted_emotion)
