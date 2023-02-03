@@ -4,11 +4,16 @@ import pickle
 import numpy as np
 import requests
 import time
-
 import nltk
 from nltk.stem import WordNetLemmatizer
-
 from keras.models import load_model
+import openai
+import os
+
+# API for openAI
+API_openai = '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'
+os.environ['OPENAI_Key'] = API_openai
+openai.api_key = os.environ['OPENAI_Key']
 
 # lemmatizer instantiation
 lemmatizer = WordNetLemmatizer()
@@ -87,10 +92,20 @@ def get_response(intent_list, intent_json):
             break
     return result
 
-print("Talk now")
+print("Chat now")
 
 while True:
     message = input()
     ints = predict_class(message)
-    res = get_response(ints, intents)
-    print(res)
+    # getting the highest intent probability
+    probability = float(ints[0]['probability'])
+
+    # comparing the probability to its threshold error
+    # if below uncertainty, get the response from openAI
+    if probability < 0.95:
+        res = openai.Completion.create(engine='text-davinci-003', prompt=message, max_tokens=200)
+        print(res['choices'][0]['text'])
+    # if above uncertainty, get the response from the intents.json dataset
+    else:
+        res = get_response(ints, intents)
+        print(res)

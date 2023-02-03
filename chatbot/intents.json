@@ -61,7 +61,7 @@
 
   {"tag":  "regards",
   "patterns":  ["how are you"],
-  "responses": ["I believe I'm doing great. How about you?"]
+  "responses": ["I believe I'm doing great. How about you?", "My role as a linguistic model for AI precludes me from having any personal experiences or engaging in any physical activities. I am here to reply to the voice command that you have given me and to deliver information to the very best of my abilities. How may I be of help to you today?"]
   },
 
   {"tag":  "create_note",
@@ -111,6 +111,27 @@
 
   {"tag": "appreciation",
   "patterns":  ["I enjoy your company", "I enjoy talking to you", "I enjoy your presence", "It's been great talking with you", "I appreciate our conversation"],
-  "responses": ["Likewise!", "Feelings are mutual", "I enjoy talking to you as well", "I also appreciate our conversation", "It's been great talking with you"]}
+  "responses": ["Likewise!", "Feelings are mutual", "I enjoy talking to you as well", "I also appreciate our conversation", "It's been great talking with you"]
+  },
 
+  {
+    "tag": "doing",
+    "patterns": ["What are you doing", "How are you spending your day?", "what are you up today"],
+    "responses": ["I am a language model for artificial intelligence created by dinosaurs, and I am currently processing your audio input so that I may reply to you. Unlike humans, I lack the capacity for physical activity and cannot have subjective sensations. My main purpose is to take in auditory inputs and output replies that are both informative and useful, depending on my training data."]
+  },
+
+  {"tag": "asking_beauty",
+  "patterns":  ["am I pretty", "am I cute", "am I handsome", "do I look pretty", "am I beautiful", "do I look cute", "do I look handsome", "do I look beautiful"],
+  "responses": ["I can't tell you how someone looks since I'm just a computer language model. The standards by which we judge what constitutes beauty may vary widely depending on their own values and the cultural context in which they live. What matters is how you value and respect yourself, and how confident you are in your own talents and strengths."]
+  },
+
+  {"tag":  "confident_beauty",
+  "patterns":  ["I am pretty", "I am cute", "I am beautiful", "I am handsome"],
+  "responses":  ["That's great! Building one's confidence and sense of self-esteem may improve many aspects of one's life. Keep in mind that it's vital that you accept and like yourself just as you are.", "Wow, that's fantastic! Feeling good about oneself and exuding confidence may improve one's quality of life and overall health. Maintaining a sense of peace and contentment with one's own identity is of paramount importance."]
+  },
+
+  {"tag":  "confident_smart",
+  "patterns":  ["I am smart", "I am intelligent"],
+  "responses":  ["Wow, that's wonderful! Feeling good about oneself and exuding confidence may improve one's quality of life and overall health. Maintaining a sense of peace and contentment with one's own identity is of paramount importance.", "Absolutely fantastic! Intelligence is a priceless resource that may be used to further one's pursuit of happiness. Never stop challenging yourself intellectually, and put your wits to good use."]
+  }
 ]}
