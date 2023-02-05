@@ -1,6 +1,8 @@
 import random
 import json
 import pickle
+import sys
+
 import numpy as np
 import requests
 import time
@@ -9,11 +11,6 @@ from nltk.stem import WordNetLemmatizer
 from keras.models import load_model
 import openai
 import os
-
-# API for openAI
-API_openai = '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'
-os.environ['OPENAI_Key'] = API_openai
-openai.api_key = os.environ['OPENAI_Key']
 
 # lemmatizer instantiation
 lemmatizer = WordNetLemmatizer()
@@ -68,13 +65,16 @@ def get_response(intent_list, intent_json):
         if tag == 'weather':
             api_key = '987f44e8c16780be8c85e25a409ed07b'
             base_url = "http://api.openweathermap.org/data/2.5/weather?"
-            city_name = input("What is your city?\n").lower().capitalize()
-            complete_url = base_url + "appid=" + api_key + "&q=" + city_name
-            response = requests.get(complete_url)
-            x = response.json()
-            result = f"The temperature today in {city_name} city is {round(x['main']['temp'] - 273, 2)} celcius.\n" \
-                     f"The weather description is {x['weather'][0]['description']}."
-            break
+            try:
+                city_name = input("What is your city or province?\n").lower().capitalize()
+                complete_url = base_url + "appid=" + api_key + "&q=" + city_name
+                response = requests.get(complete_url)
+                x = response.json()
+                result = f"The temperature today in {city_name} is {round(x['main']['temp'] - 273, 2)} celcius.\n" \
+                         f"The weather description is {x['weather'][0]['description']}."
+                break
+            except KeyError:
+                print(f"{city_name} is not a city nor a province! Please try again.")
 
         elif tag == 'date':
             day = time.strftime("%A")
@@ -92,17 +92,56 @@ def get_response(intent_list, intent_json):
             break
     return result
 
+isAPIvalid = False
+while not isAPIvalid:
+    try:
+        # check if user has an API
+        with open("API.txt", "r") as file:
+            # API for openAI
+            API_openai = file.read()
+            os.environ['OPENAI_Key'] = API_openai
+            openai.api_key = os.environ['OPENAI_Key']
+            file.close()
+        testing = openai.Completion.create(engine='text-davinci-003', prompt="is it working", max_tokens=200)
+        isAPIvalid = True
+
+    except openai.error.AuthenticationError:
+        with open("API.txt", "r") as file:
+            content = file.read()
+
+        # no API
+        if not content:
+            print("\nYou have no API. Please copy your API key at https://platform.openai.com/account/api-keys.")
+            API_openai_copied = input("Paste your API here: ")
+            with open("API.txt", "w") as file:
+                # Write some content to the file
+                file.write(API_openai_copied)
+                file.close()
+        else:
+            print("\nInvalid API. Please copy your API key at https://platform.openai.com/account/api-keys.")
+            API_openai_copied = input("Paste your API here: ")
+            with open("API.txt", "w") as file:
+                # Write some content to the file
+                file.write(API_openai_copied)
+                file.close()
+
+
 print("Chat now")
 
 while True:
     message = input()
     ints = predict_class(message)
+    if ints[0]["intent"] == "goodbye":
+        res = get_response(ints, intents)
+        print(res)
+        sys.exit(0)
+
     # getting the highest intent probability
     probability = float(ints[0]['probability'])
 
     # comparing the probability to its threshold error
     # if below uncertainty, get the response from openAI
-    if probability < 0.95:
+    if probability < 0.98:
         res = openai.Completion.create(engine='text-davinci-003', prompt=message, max_tokens=200)
         print(res['choices'][0]['text'])
     # if above uncertainty, get the response from the intents.json dataset

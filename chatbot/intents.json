@@ -5,7 +5,7 @@
   },
 
   {"tag":  "goodbye",
-  "patterns":  ["See you", "goodbye", "I am leaving", "have a good day", "bye", "I need to go", "I have to go"],
+  "patterns":  ["See you", "goodbye", "I am leaving", "have a good day", "bye", "I need to go", "I have to go", "Exit"],
   "responses":  ["Talk to you later", "Good bye!", "Okay, take care."]
   },
 
@@ -30,7 +30,7 @@
   },
 
   {"tag":  "date",
-  "patterns":  ["What is the date today", "day today", "date", "date today"],
+  "patterns":  ["What is the date today", "What is the day today"],
   "responses":  [""]
   },
 
@@ -117,7 +117,7 @@
   {
     "tag": "doing",
     "patterns": ["What are you doing", "How are you spending your day?", "what are you up today"],
-    "responses": ["I am a language model for artificial intelligence created by dinosaurs, and I am currently processing your audio input so that I may reply to you. Unlike humans, I lack the capacity for physical activity and cannot have subjective sensations. My main purpose is to take in auditory inputs and output replies that are both informative and useful, depending on my training data."]
+    "responses": ["I am a language model for artificial intelligence created by dinosaurs, and I am currently processing your message so that I may reply to you. Unlike humans, I lack the capacity for physical activity and cannot have subjective sensations. My main purpose is to take in input messages and output replies that are both informative and useful, depending on my training data."]
   },
 
   {"tag": "asking_beauty",
