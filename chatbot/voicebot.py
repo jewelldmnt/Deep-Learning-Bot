@@ -248,7 +248,7 @@ while True:
 
         # comparing the probability to its threshold error
         # if below uncertainty, get the response from openAI
-        if probability < 0.95:
+        if probability < 0.98:
             res = openai.Completion.create(engine='text-davinci-003', prompt=message, max_tokens=200)
             speak(res['choices'][0]['text'])
 
