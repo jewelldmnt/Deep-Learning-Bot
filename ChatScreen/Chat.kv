@@ -1,0 +1,47 @@
+MDScreen:
+    name: "chat"
+    MDFloatLayout:
+        md_bg_color: "#D7F6FD"
+        Image:
+            source: "./ChatScreen/bg.png"
+            size_hint: 1.1, 1
+            pos: -20, 0
+
+        MDLabel:
+            text: "Bototot"
+            font_name: "./ChatScreen/Kanit-Medium.ttf"
+            font_size: 15
+            pos: 109, 250
+            theme_text_color: "Custom"
+            text_color: 219/255, 219/255, 219/255
+
+        MDFloatLayout:
+            size_hint: 0.8375, 0.27857142857
+            pos: 10, 15
+
+            canvas:
+                Color:
+                    rgb: 217/255, 217/255, 217/255
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            TextInput:
+                hint_text: "Type here . . ."
+                size_hint: 1, 1
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                font_size: 15
+                cursor_color: "#1D567B"
+                cursor_width: 2
+                foreground_color: 0/255, 7/255, 22/255
+                background_color: 0, 0, 0, 0
+                font_name: "./ChatScreen/Kanit-Light.ttf"
+                padding: 10
+
+        Button:
+            size_hint: 0.095, 0.05357142857
+            pos: 14, 514
+            background_normal: "./ChatScreen/button_back.png"
+            background_down: "./ChatScreen/button_back.png"
+            on_release:
+                root.manager.transition.direction = "right"
+                root.manager.current = "call"
