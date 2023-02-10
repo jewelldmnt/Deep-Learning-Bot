@@ -4,6 +4,7 @@ import pickle
 import numpy as np
 import requests
 import time
+
 import nltk
 from nltk.stem import WordNetLemmatizer
 
@@ -19,7 +20,6 @@ intents = json.loads(open('./chatbot/intents.json').read())
 words = pickle.load(open('./chatbot/words.pkl', 'rb'))
 classes = pickle.load(open('./chatbot/classes.pkl', 'rb'))
 model = load_model('./chatbot/chatbot_model.h5')
-
 
 # lemmatizing the sentence
 class Chatbot():
@@ -64,18 +64,7 @@ class Chatbot():
         list_of_intents = intent_json['intents']
 
         for i in list_of_intents:
-            if tag == 'date':
-                day = time.strftime("%A")
-                date = time.strftime("%B %d %Y")
-                self.result = f"Today is {day}, {date}"
-                break
-
-            elif tag == 'time':
-                time_today = time.strftime("%I: %M %p")
-                self.result = f"It is {time_today}."
-                break
-
-            elif i['tag'] == tag:
+            if i['tag'] == tag:
                 self.result = random.choice(i['responses'])
                 break
         return self.result

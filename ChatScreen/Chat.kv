@@ -1,19 +1,67 @@
+<Command>
+    size_hint_y: None
+    pos_hint: {"right": 0.98}
+    height: self.texture_size[1]
+    padding: 12, 10
+    theme_text_color: "Custom"
+    text_color: 74/255, 74/255, 74/255
+    canvas.before:
+        Color:
+            rgb: (191/255, 211/255, 216/255)
+        RoundedRectangle:
+            size: self.width, self.height
+            pos: self.pos
+            radius: [23, 23, 0, 23]
+
+<Response>
+    size_hint_y: None
+    pos_hint: {"x": 0.02}
+    height: self.texture_size[1]
+    padding: 12, 10
+    canvas.before:
+        Color:
+            rgb: 133/255, 199/255, 242/255
+        RoundedRectangle:
+            size: self.width, self.height
+            pos: self.pos
+            radius: [23, 23, 23, 0]
+
 MDScreen:
     name: "chat"
+    bot_name: bot_name
+    text_input: text_input
+    chat_list: chat_list
     MDFloatLayout:
         md_bg_color: "#D7F6FD"
         Image:
-            source: "./ChatScreen/bg.png"
+            source: "./ChatScreen/assets/bg.png"
             size_hint: 1.1, 1
             pos: -20, 0
 
         MDLabel:
+            id: bot_name
             text: "Bototot"
-            font_name: "./ChatScreen/Kanit-Medium.ttf"
+            font_name: "./ChatScreen/assets/Kanit-Medium.ttf"
             font_size: 15
             pos: 109, 250
             theme_text_color: "Custom"
             text_color: 219/255, 219/255, 219/255
+
+        MDFloatLayout:
+            ScrollView:
+                size_hint_y: 0.77
+                pos_hint: {"x": 0, "y": 0.09}
+                do_scroll_x: False
+                do_scroll_y: True
+                BoxLayout:
+                    id: chat_list
+                    orientation: "vertical"
+                    size: 400, 379
+                    height: self.minimum_height
+                    size_hint: None, None
+                    pos_hint: {'top': 10}
+                    cols: 1
+                    spacing: 5
 
         MDFloatLayout:
             size_hint: 0.8375, 0.27857142857
@@ -21,11 +69,18 @@ MDScreen:
 
             canvas:
                 Color:
+                    rgb: 177/255, 213/255, 221/255
+                Rectangle:
+                    size: 400, 181
+                    pos: 0, 0
+
+                Color:
                     rgb: 217/255, 217/255, 217/255
                 Rectangle:
                     size: self.size
                     pos: self.pos
             TextInput:
+                id: text_input
                 hint_text: "Type here . . ."
                 size_hint: 1, 1
                 pos_hint: {"center_x": 0.5, "center_y": 0.5}
@@ -34,14 +89,24 @@ MDScreen:
                 cursor_width: 2
                 foreground_color: 0/255, 7/255, 22/255
                 background_color: 0, 0, 0, 0
-                font_name: "./ChatScreen/Kanit-Light.ttf"
+                font_name: "./ChatScreen/assets/Kanit-Light.ttf"
                 padding: 10
 
-        Button:
-            size_hint: 0.095, 0.05357142857
-            pos: 14, 514
-            background_normal: "./ChatScreen/button_back.png"
-            background_down: "./ChatScreen/button_back.png"
+        MDIconButton:
+            icon: "./ChatScreen/assets/button_back.png"
+            pos: 8, 500
+            icon_size: 30
             on_release:
                 root.manager.transition.direction = "right"
-                root.manager.current = "call"
+                root.manager.current = "homepage"
+
+        MDIconButton:
+            icon: "./ChatScreen/assets/button_send.png"
+            pos: 343, 120
+            icon_size: 40
+            on_release: app.send()
+
+
+
+
+

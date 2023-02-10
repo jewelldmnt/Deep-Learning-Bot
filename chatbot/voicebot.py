@@ -5,7 +5,7 @@ import sys
 import time
 import requests
 import json
-from chatbotClass import Chatbot
+from voicebotClass import Chatbot
 import openai
 import os
 

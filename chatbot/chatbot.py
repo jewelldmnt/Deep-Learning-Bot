@@ -62,21 +62,7 @@ def get_response(intent_list, intent_json):
     list_of_intents = intent_json['intents']
 
     for i in list_of_intents:
-        if tag == 'weather':
-            api_key = '987f44e8c16780be8c85e25a409ed07b'
-            base_url = "http://api.openweathermap.org/data/2.5/weather?"
-            try:
-                city_name = input("What is your city or province?\n").lower().capitalize()
-                complete_url = base_url + "appid=" + api_key + "&q=" + city_name
-                response = requests.get(complete_url)
-                x = response.json()
-                result = f"The temperature today in {city_name} is {round(x['main']['temp'] - 273, 2)} celcius.\n" \
-                         f"The weather description is {x['weather'][0]['description']}."
-                break
-            except KeyError:
-                print(f"{city_name} is not a city nor a province! Please try again.")
-
-        elif tag == 'date':
+        if tag == 'date':
             day = time.strftime("%A")
             date = time.strftime("%B %d %Y")
             result = f"Today is {day}, {date}"
