@@ -1,4 +1,4 @@
-<Command>
+<ChatCommand>
     size_hint_y: None
     pos_hint: {"right": 0.98}
     height: self.texture_size[1]
@@ -13,7 +13,7 @@
             pos: self.pos
             radius: [23, 23, 0, 23]
 
-<Response>
+<ChatResponse>
     size_hint_y: None
     pos_hint: {"x": 0.02}
     height: self.texture_size[1]
@@ -28,7 +28,6 @@
 
 MDScreen:
     name: "chat"
-    bot_name: bot_name
     text_input: text_input
     chat_list: chat_list
     MDFloatLayout:
@@ -39,7 +38,6 @@ MDScreen:
             pos: -20, 0
 
         MDLabel:
-            id: bot_name
             text: "Bototot"
             font_name: "./ChatScreen/assets/Kanit-Medium.ttf"
             font_size: 15
@@ -104,7 +102,7 @@ MDScreen:
             icon: "./ChatScreen/assets/button_send.png"
             pos: 343, 120
             icon_size: 40
-            on_release: app.send()
+            on_release: app.sendChat()
 
 
 
