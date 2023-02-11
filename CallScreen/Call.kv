@@ -17,10 +17,11 @@ MDScreen:
         Button:
             id: button_speak
             background_normal: "./CallScreen/assets/button_speak.png"
-            background_down: "./CallScreen/assets/button_speak.png"
+            background_down: "./CallScreen/assets/button_speakDown.png"
             background_disabled_normal: "./CallScreen/assets/button_dontSpeak.png"
             pos: 220, 118
             size_hint: 0.185, 0.1321428571
+            disabled: False
             on_release:
                 app.say_something()
 
