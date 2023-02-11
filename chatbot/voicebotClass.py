@@ -22,7 +22,7 @@ classes = pickle.load(open('./chatbot/classes.pkl', 'rb'))
 model = load_model('./chatbot/chatbot_model.h5')
 
 # lemmatizing the sentence
-class Chatbot():
+class VoiceBot():
     def __init__(self):
         pass
 

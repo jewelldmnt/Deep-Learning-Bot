@@ -1,2 +1,31 @@
 MDScreen:
     name: "call"
+    button_speak: button_speak
+
+    MDFloatLayout:
+        md_bg_color: "#D7F6FD"
+        Image:
+            source: "./CallScreen/assets/bg.png"
+            size_hint: 1.1, 1
+            pos: -20, 110
+
+        MDIconButton:
+            icon: "./CallScreen/assets/button_end.png"
+            pos: 95, 100
+            icon_size: 80
+
+        Button:
+            id: button_speak
+            background_normal: "./CallScreen/assets/button_speak.png"
+            background_down: "./CallScreen/assets/button_speak.png"
+            background_disabled_normal: "./CallScreen/assets/button_dontSpeak.png"
+            pos: 220, 118
+            size_hint: 0.185, 0.1321428571
+            on_release:
+                app.say_something()
+
+
+
+
+
+
