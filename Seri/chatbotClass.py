@@ -13,12 +13,12 @@ from keras.models import load_model
 lemmatizer = WordNetLemmatizer()
 
 # storing the json file as a dictionary
-intents = json.loads(open('./chatbot/intents.json').read())
+intents = json.loads(open('./Seri/intents.json').read())
 
 # storing the data into its variable
-words = pickle.load(open('./chatbot/words.pkl', 'rb'))
-classes = pickle.load(open('./chatbot/classes.pkl', 'rb'))
-model = load_model('./chatbot/chatbot_model.h5')
+words = pickle.load(open('./Seri/words.pkl', 'rb'))
+classes = pickle.load(open('./Seri/classes.pkl', 'rb'))
+model = load_model('./Seri/Seri_model.h5')
 
 
 # lemmatizing the sentence

@@ -1,4 +1,3 @@
-from neuralintents import GenericAssistant
 import speech_recognition
 import pyttsx3 as tts
 import sys
@@ -23,7 +22,7 @@ speaker.setProperty('rate', 150)
 
 # loading the dataset
 intents = json.loads(open('intents.json').read())
-cb = Chatbot()
+vb = VoiceBot()
 
 todo_list = ["Coding"]
 
@@ -163,8 +162,8 @@ def quit():
 # speaking the response from the datasets
 def response():
     global message
-    ints = cb.predict_class(message)
-    res = cb.get_response(ints, intents)
+    ints = vb.predict_class(message)
+    res = vb.get_response(ints, intents)
     speak(res)
 
 # dictionary for tag and corresponding responses
@@ -193,9 +192,6 @@ mappings = {
     "appreciation": response
 }
 
-# training the model
-assistant = GenericAssistant('intents.json', intent_methods=mappings)
-assistant.train_model()
 
 # checking the validity of the user's openAI API
 isAPIvalid = False
@@ -241,7 +237,7 @@ while True:
         message = user_says()
         print(message)
         # predicting the intent of the message
-        ints = cb.predict_class(message)
+        ints = vb.predict_class(message)
 
         # getting the highest intent probability
         probability = float(ints[0]['probability'])
@@ -254,7 +250,8 @@ while True:
 
         # if above uncertainty, get the response from the intents.json dataset
         else:
-            assistant.request(message)
+            if ints[0]['intent'] in mappings.keys():
+                mappings[ints[0]['intent']]()
 
     except speech_recognition.UnknownValueError:
         recognizer = speech_recognition.Recognizer()

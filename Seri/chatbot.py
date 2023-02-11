@@ -21,7 +21,7 @@ intents = json.loads(open('intents.json').read())
 # storing the data into its variable
 words = pickle.load(open('words.pkl', 'rb'))
 classes = pickle.load(open('classes.pkl', 'rb'))
-model = load_model('chatbot_model.h5')
+model = load_model('Seri_model.h5')
 
 # lemmatizing the sentence
 def clean_up_sentence(sentence):
