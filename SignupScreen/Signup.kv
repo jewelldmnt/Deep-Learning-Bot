@@ -1,0 +1,64 @@
+MDScreen:
+    name: "signin"
+    MDFloatLayout:
+        md_bg_color: "#D7F6FD"
+        Image:
+            source: "./SignupScreen/assets/bg.png"
+            size_hint: 1.1, 1
+            pos: -20, 40
+
+        MDIconButton:
+            icon: "./SignupScreen/assets/button_back.png"
+            pos: 10, 500
+            icon_size: 30
+
+        MDFillRoundFlatIconButton:
+            text: "SIGN UP  "
+            font_name: "./SignupScreen/assets/Kanit-Medium.ttf"
+            font_size: 15
+            pos: 140, 75
+            md_bg_color: "842828"
+
+        MDTextButton:
+            text: "Sign in"
+            font_name: "./SignupScreen/assets/Kanit-Medium.ttf"
+            font_size: 10
+            pos: 240, 51
+            theme_text_color: "Custom"
+            text_color: "842828"
+
+        MDTextButton:
+            text: "(Click here to get the API)"
+            font_name: "./SignupScreen/assets/Kanit-Medium.ttf"
+            font_size: 10
+            pos: 80, 373
+            theme_text_color: "Custom"
+            text_color: "7B1D1D"
+            on_release:
+                import webbrowser
+                webbrowser.open('https://platform.openai.com/account/api-keys')
+        
+        MDTextField:
+            font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
+            size_hint: 0.7125, None
+            pos: 57, 396
+
+        MDTextField:
+            font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
+            size_hint: 0.7125, None
+            pos: 57, 326
+
+        MDTextField:
+            font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
+            size_hint: 0.7125, None
+            pos: 57, 258
+
+        MDTextField:
+            font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
+            size_hint: 0.7125, None
+            pos: 57, 189
+
+        MDTextField:
+            font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
+            size_hint: 0.7125, None
+            pos: 57, 120
