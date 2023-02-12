@@ -1,5 +1,7 @@
 MDScreen:
     name: "signin"
+    email: email
+    password: password
     MDFloatLayout:
         md_bg_color: "#D7F6FD"
         Image:
@@ -21,6 +23,7 @@ MDScreen:
             font_size: 15
             pos: 140, 114
             md_bg_color: "842828"
+            on_release: app.sign_in()
         
         MDTextButton:
             text: "Sign up"
@@ -34,11 +37,13 @@ MDScreen:
                 root.manager.current = "signup"
 
         MDTextField:
+            id: email
             font_name: "./SigninScreen/assets/Kanit-Regular.ttf"
             size_hint: 0.7125, None
             pos: 57, 234
 
         MDTextField:
+            id: password
             font_name: "./SigninScreen/assets/Kanit-Regular.ttf"
             size_hint: 0.7125, None
             pos: 57, 165
