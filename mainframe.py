@@ -16,7 +16,6 @@ from json import loads
 import os
 from speech_recognition import UnknownValueError
 import account
-import sys
 
 # setting the window size of the screen
 Window.size = (400, 560)
@@ -173,20 +172,32 @@ class Bot(MDApp):
 
         # logged in successfully
         if account.signup(filename, email, password, confirm_password, first_name, api_openai) == 4:
+            screen_manager.get_screen('signup').first_name.text = ""
+            screen_manager.get_screen('signup').email.text = ""
+            screen_manager.get_screen('signup').password.text = ""
+            screen_manager.get_screen('signup').confirm_password.text = ""
+            screen_manager.get_screen('signup').api_oai.text = ""
             screen_manager.transition.direction = "left"
             screen_manager.current = "homepage"
 
         # email already exist
         elif account.signup(filename, email, password, confirm_password, first_name, api_openai) == 1:
+            screen_manager.get_screen('signup').email.required = True
+            screen_manager.get_screen('signup').email.helper_text = "Email already exist!"
             screen_manager.get_screen('signup').email.text = ""
 
         # password and confirm password don't match
         elif account.signup(filename, email, password, confirm_password, first_name, api_openai) == 2:
+            screen_manager.get_screen('signup').password.required = True
+            screen_manager.get_screen('signup').confirm_password.required = True
+            screen_manager.get_screen('signup').confirm_password.helper_text = "The Passwords don't match!"
             screen_manager.get_screen('signup').password.text = ""
             screen_manager.get_screen('signup').confirm_password.text = ""
 
         # invalid API
         elif account.signup(filename, email, password, confirm_password, first_name, api_openai) == 3:
+            screen_manager.get_screen('signup').api_oai.required = True
+            screen_manager.get_screen('signup').api_oai.helper_text = "Invalid API"
             screen_manager.get_screen('signup').api_oai.text = ""
 
     def sign_in(self):
@@ -194,29 +205,25 @@ class Bot(MDApp):
         email = screen_manager.get_screen('signin').email.text
         password = screen_manager.get_screen('signin').password.text
 
-        if email == "":
-            print("Email is empty")
-        if password == "":
-            print("Password is empty")
-
         # logged in successfully
         if email and password is not "" and account.login(filename, email, password) == 3:
+            screen_manager.get_screen('signin').email.text = ""
+            screen_manager.get_screen('signin').password.text = ""
             screen_manager.transition.direction = "left"
             screen_manager.current = "homepage"
 
         # account does not exist
         elif account.login(filename, email, password) == 1:
-            print("account does not exist!")
+            screen_manager.get_screen('signin').email.required = True
+            screen_manager.get_screen('signin').email.helper_text = "Account does not exist!"
             screen_manager.get_screen('signin').email.text = ""
-            screen_manager.get_screen('signin').password.text = ""
+
 
         # account does not exist
         elif account.login(filename, email, password) == 2:
-            print("Incorrect password!")
+            screen_manager.get_screen('signin').password.required = True
+            screen_manager.get_screen('signin').password.helper_text = "Incorrect Password!"
             screen_manager.get_screen('signin').password.text = ""
-
-    def exit(self):
-        sys.exit(0)
 
 
 if __name__ == '__main__':
