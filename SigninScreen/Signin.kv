@@ -8,9 +8,12 @@ MDScreen:
             pos: -20, 40
 
         MDIconButton:
-            icon: "./SigninScreen/assets/button_back.png"
-            pos: 10, 500
+            icon: "./ChatScreen/assets/button_back.png"
+            pos: 8, 500
             icon_size: 30
+            on_release:
+                root.manager.transition.direction = "right"
+                root.manager.current = "startpage"
 
         MDFillRoundFlatIconButton:
             text: "SIGN IN  "
@@ -26,6 +29,9 @@ MDScreen:
             pos: 230, 73
             theme_text_color: "Custom"
             text_color: "842828"
+            on_release:
+                root.manager.transition.direction = "right"
+                root.manager.current = "signup"
 
         MDTextField:
             font_name: "./SigninScreen/assets/Kanit-Regular.ttf"

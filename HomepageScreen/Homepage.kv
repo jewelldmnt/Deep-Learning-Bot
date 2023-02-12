@@ -6,6 +6,7 @@ MDScreen:
             source: "./HomepageScreen/assets/bg.png"
             size_hint: 1, 1
             pos: 0, 0
+
     MDFillRoundFlatIconButton:
         text: "     LET'S TEXT!    "
         icon: "./HomepageScreen/assets/text.png"
@@ -15,7 +16,11 @@ MDScreen:
         theme_text_color: "Custom"
         text_color: "4C4C4C"
         pos: 70, 120
-        md_bg_color: "#85C7F2"
+        md_bg_color: 133/255, 199/255, 242/255
+        on_release:
+            root.manager.transition.direction = "left"
+            root.manager.current = "chat"
+
     MDFillRoundFlatIconButton:
         text: "     LET'S TALK!    "
         icon: "./HomepageScreen/assets/voice.png"
@@ -25,12 +30,20 @@ MDScreen:
         theme_text_color: "Custom"
         text_color: "4C4C4C"
         pos: 70, 40
-        md_bg_color: "#85C7F2"
+        md_bg_color: 133/255, 199/255, 242/255
+        on_release:
+            root.manager.transition.direction = "left"
+            root.manager.current = "call"
+
     MDIconButton:
         icon: "./HomepageScreen/assets/exit.png"
         pos: 300, 475
         icon_size: 75
+
     MDIconButton:
-        icon: "./HomepageScreen/assets/button_back.png"
-        pos: 20, 490
-        icon_size: 38
+        icon: "./ChatScreen/assets/button_back.png"
+        pos: 8, 500
+        icon_size: 30
+        on_release:
+            root.manager.transition.direction = "right"
+            root.manager.current = "startpage"

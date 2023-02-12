@@ -6,6 +6,7 @@ MDScreen:
             source: "./StartpageScreen/assets/bg.png"
             size_hint: 1, 1
             pos: 0, 0
+
     MDFillRoundFlatIconButton
         text: "    SIGN UP    "
         font_name: "./ChatScreen/assets/Kanit-Medium.ttf"
@@ -13,7 +14,11 @@ MDScreen:
         theme_text_color: "Custom"
         text_color: "4C4C4C"
         pos: 100, 120
-        md_bg_color: "#85C7F2"
+        md_bg_color: 133/255, 199/255, 242/255
+        on_release:
+            root.manager.transition.direction = "left"
+            root.manager.current = "signup"
+
     MDFillRoundFlatIconButton
         text: "    SIGN IN     "
         font_name: "./ChatScreen/assets/Kanit-Medium.ttf"
@@ -21,7 +26,11 @@ MDScreen:
         theme_text_color: "Custom"
         text_color: "4C4C4C"
         pos: 100, 40
-        md_bg_color: "#85C7F2"
+        md_bg_color: 133/255, 199/255, 242/255
+        on_release:
+            root.manager.transition.direction = "left"
+            root.manager.current = "signin"
+
     MDIconButton:
         icon: "./StartpageScreen/assets/exit.png"
         pos: 310, 490

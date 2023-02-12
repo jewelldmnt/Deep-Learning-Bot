@@ -1,26 +1,31 @@
+# modules and libraries for GUI
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.clock import Clock
 from kivy.core.window import Window
-from kivy.uix.screenmanager import ScreenManager
+from kivy.uix.screenmanager import ScreenManager, FadeTransition
 from kivymd.uix.label import MDLabel
 from kivy.properties import StringProperty, NumericProperty
 from kivy.core.text import LabelBase
 
-# module and libraries for the bot
+# modules and libraries for the bot
 from Seri.chatbotClass import Chatbot
 from Seri.voicebotClass import VoiceBot
 import openai
 from json import loads
 import os
 from speech_recognition import UnknownValueError
+import account
 
+# setting the window size of the screen
 Window.size = (400, 560)
+
 # loading the dataset
 intents = loads(open('Seri/intents.json').read())
 vb = VoiceBot()
 message = ''
 
+# getting the API for openai
 with open("Seri/API.txt", "r") as file:
     # API for openAI
     API_openai = file.read()
@@ -29,6 +34,7 @@ with open("Seri/API.txt", "r") as file:
     file.close()
 
 
+# class for the user's message in chat screen
 class ChatCommand(MDLabel):
     text = StringProperty()
     size_hint_x = NumericProperty()
@@ -37,6 +43,7 @@ class ChatCommand(MDLabel):
     font_size = 15
 
 
+# class for the bot response in chat screen
 class ChatResponse(MDLabel):
     text = StringProperty()
     size_hint_x = NumericProperty()
@@ -44,22 +51,26 @@ class ChatResponse(MDLabel):
     font_name = "./ChatScreen/assets/Kanit-Light.ttf"
     font_size = 15
 
+
 class Bot(MDApp):
+
+    # for changing the current screen
     def change_screen(self, name):
         screen_manager.current = name
 
+    # for building the screens
     def build(self):
         global screen_manager
         screen_manager = ScreenManager()
-        # screen_manager.add_widget(Builder.load_file("./StartpageScreen/Startpage.kv"))
-        # screen_manager.add_widget(Builder.load_file("./HomepageScreen/Homepage.kv"))
-        # screen_manager.add_widget(Builder.load_file("./ChatScreen/Chat.kv"))
-        # screen_manager.add_widget(Builder.load_file("./CallScreen/Call.kv"))
-        # screen_manager.add_widget(Builder.load_file("./SigninScreen/Signin.kv"))
-        # screen_manager.add_widget(Builder.load_file("./SignupScreen/Signup.kv"))
-        
+        screen_manager.add_widget(Builder.load_file("./StartpageScreen/Startpage.kv"))
+        screen_manager.add_widget(Builder.load_file("./HomepageScreen/Homepage.kv"))
+        screen_manager.add_widget(Builder.load_file("./SigninScreen/Signin.kv"))
+        screen_manager.add_widget(Builder.load_file("./SignupScreen/Signup.kv"))
+        screen_manager.add_widget(Builder.load_file("./ChatScreen/Chat.kv"))
+        screen_manager.add_widget(Builder.load_file("./CallScreen/Call.kv"))
         return screen_manager
 
+    # sending the user's chat message
     def sendChat(self):
         global size, halign, input
         if screen_manager.get_screen('chat').text_input != "":
@@ -88,6 +99,7 @@ class Bot(MDApp):
             Clock.schedule_once(self.responseChat, 2)
             screen_manager.get_screen('chat').text_input.text = ""
 
+    # getting the bot's chat response
     def responseChat(self, *args):
         cb = Chatbot()
         ints = cb.predict_class(input)
@@ -142,6 +154,38 @@ class Bot(MDApp):
         except UnknownValueError:
             vb.speak("I did not understand you. Please try again!")
         screen_manager.get_screen('call').image_listening.opacity = 0
+
+    def checkInput(self):
+        api_openai = screen_manager.get_screen('signup').api_oai.text
+        first_name = screen_manager.get_screen('signup').first_name.text
+        email = screen_manager.get_screen('signup').email.text
+        password = screen_manager.get_screen('signup').password.text
+        confirm_password = screen_manager.get_screen('signup').confirm_password.text
+
+        # if all entry are not empty
+        if first_name != "" and api_openai != "" and email != "" and password != "" and confirm_password != "":
+            self.sign_up(api_openai, first_name, email, password, confirm_password)
+
+    def sign_up(self, api_openai, first_name, email, password, confirm_password):
+        filename = "credentials.txt"
+
+        # logged in successfully
+        if account.signup(filename, email, password, confirm_password, first_name, api_openai) == 4:
+            screen_manager.transition.direction = "left"
+            screen_manager.current = "homepage"
+
+        # email already exist
+        elif account.signup(filename, email, password, confirm_password, first_name, api_openai) == 1:
+            screen_manager.get_screen('signup').email.text = ""
+
+        # password and confirm password don't match
+        elif account.signup(filename, email, password, confirm_password, first_name, api_openai) == 2:
+            screen_manager.get_screen('signup').password.text = ""
+            screen_manager.get_screen('signup').confirm_password.text = ""
+
+        # invalid API
+        elif account.signup(filename, email, password, confirm_password, first_name, api_openai) == 3:
+            screen_manager.get_screen('signup').api_oai.text = ""
 
 
 if __name__ == '__main__':

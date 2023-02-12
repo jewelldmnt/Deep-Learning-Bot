@@ -1,5 +1,11 @@
 MDScreen:
-    name: "signin"
+    name: "signup"
+    first_name: first_name
+    api_oai: api_oai
+    email: email
+    password: password
+    confirm_password: confirm_password
+
     MDFloatLayout:
         md_bg_color: "#D7F6FD"
         Image:
@@ -8,9 +14,12 @@ MDScreen:
             pos: -20, 40
 
         MDIconButton:
-            icon: "./SignupScreen/assets/button_back.png"
-            pos: 10, 500
+            icon: "./ChatScreen/assets/button_back.png"
+            pos: 8, 500
             icon_size: 30
+            on_release:
+                root.manager.transition.direction = "right"
+                root.manager.current = "startpage"
 
         MDFillRoundFlatIconButton:
             text: "SIGN UP  "
@@ -18,6 +27,7 @@ MDScreen:
             font_size: 15
             pos: 140, 75
             md_bg_color: "842828"
+            on_release: app.checkInput()
 
         MDTextButton:
             text: "Sign in"
@@ -26,6 +36,9 @@ MDScreen:
             pos: 240, 51
             theme_text_color: "Custom"
             text_color: "842828"
+            on_release:
+                root.manager.transition.direction = "left"
+                root.manager.current = "signin"
 
         MDTextButton:
             text: "(Click here to get the API)"
@@ -39,26 +52,31 @@ MDScreen:
                 webbrowser.open('https://platform.openai.com/account/api-keys')
         
         MDTextField:
+            id: first_name
             font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
             size_hint: 0.7125, None
             pos: 57, 396
 
         MDTextField:
+            id: api_oai
             font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
             size_hint: 0.7125, None
             pos: 57, 326
 
         MDTextField:
+            id: email
             font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
             size_hint: 0.7125, None
             pos: 57, 258
 
         MDTextField:
+            id: password
             font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
             size_hint: 0.7125, None
             pos: 57, 189
 
         MDTextField:
+            id: confirm_password
             font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
             size_hint: 0.7125, None
             pos: 57, 120
