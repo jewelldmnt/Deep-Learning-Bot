@@ -16,6 +16,7 @@ from json import loads
 import os
 from speech_recognition import UnknownValueError
 import account
+import sys
 
 # setting the window size of the screen
 Window.size = (400, 560)
@@ -213,6 +214,9 @@ class Bot(MDApp):
         elif account.login(filename, email, password) == 2:
             print("Incorrect password!")
             screen_manager.get_screen('signin').password.text = ""
+
+    def exit(self):
+        sys.exit(0)
 
 
 if __name__ == '__main__':

@@ -39,10 +39,11 @@ MDScreen:
         icon: "./HomepageScreen/assets/exit.png"
         pos: 300, 475
         icon_size: 75
+        on_release: app.exit()
 
     MDIconButton:
         icon: "./ChatScreen/assets/button_back.png"
-        pos: 8, 500
+        pos: 8, 494
         icon_size: 30
         on_release:
             root.manager.transition.direction = "right"
