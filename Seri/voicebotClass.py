@@ -1,16 +1,14 @@
-import random
-import json
-import pickle
-import numpy as np
-import speech_recognition
-import pyttsx3 as tts
-import sys
-import time
-import requests
-import openai
-import os
+from random import choice
+from json import loads
+from pickle import load
+from numpy import array
+from speech_recognition import Microphone, Recognizer, UnknownValueError
+from pyttsx3 import init
+from sys import exit
+from time import strftime
+from requests import get
 
-import nltk
+from nltk import word_tokenize
 from nltk.stem import WordNetLemmatizer
 
 from keras.models import load_model
@@ -19,20 +17,20 @@ from keras.models import load_model
 lemmatizer = WordNetLemmatizer()
 
 # loading the dataset
-intents = json.loads(open('./Seri/intents.json').read())
+intents = loads(open('./Seri/intents.json').read())
 
 # storing the data into its variable
-words = pickle.load(open('./Seri/words.pkl', 'rb'))
-classes = pickle.load(open('./Seri/classes.pkl', 'rb'))
+words = load(open('./Seri/words.pkl', 'rb'))
+classes = load(open('./Seri/classes.pkl', 'rb'))
 model = load_model('./Seri/Seri_model.h5')
 
 
 # for speaker and microphone
 # instantiation of the speech recognition
-recognizer = speech_recognition.Recognizer()
+recognizer = Recognizer()
 
 # instantiation of text to speech
-speaker = tts.init()
+speaker = init()
 
 # initialization of the voice and speed of voice
 voices = speaker.getProperty('voices')
@@ -73,7 +71,7 @@ class VoiceBot():
         }
 
     def clean_up_sentence(self, sentence):
-        sentence_words = nltk.word_tokenize(sentence)
+        sentence_words = word_tokenize(sentence)
         sentence_words = [lemmatizer.lemmatize(word) for word in sentence_words]
         # returns list of words in a sentence
         return sentence_words
@@ -86,12 +84,12 @@ class VoiceBot():
             for i, word in enumerate(words):
                 if word == w:
                     bag[i] = 1
-        return np.array(bag)
+        return array(bag)
 
     # probability of the class
     def predict_class(self, sentence):
         bow = self.bag_of_words(sentence)
-        res = model.predict(np.array([bow]))[0]
+        res = model.predict(array([bow]))[0]
         ERROR_THRESHOLD = 0.25
         # storing [index, class]
         results = [[i, r] for i, r in enumerate(res) if r > ERROR_THRESHOLD]
@@ -111,7 +109,7 @@ class VoiceBot():
 
         for i in list_of_intents:
             if i['tag'] == tag:
-                self.result = random.choice(i['responses'])
+                self.result = choice(i['responses'])
                 break
         return self.result
 
@@ -124,7 +122,7 @@ class VoiceBot():
     def user_says(self):
         global recognizer
         query = ''
-        with speech_recognition.Microphone() as mic:
+        with Microphone() as mic:
             recognizer.adjust_for_ambient_noise(mic, duration=0.2)
 
             # storing the speech to the audio variable
@@ -135,8 +133,8 @@ class VoiceBot():
             query = recognizer.recognize_google(audio, language='en-in')
             query.lower()
 
-        except speech_recognition.UnknownValueError:
-            recognizer = speech_recognition.Recognizer()
+        except UnknownValueError:
+            recognizer = Recognizer()
             self.speak("I did not understand you. Please try again!")
 
         # returns string transcription
@@ -144,14 +142,14 @@ class VoiceBot():
 
     # returns date today
     def date_today(self):
-        day = time.strftime("%A")
-        date = time.strftime("%B %d %Y")
+        day = strftime("%A")
+        date = strftime("%B %d %Y")
         result = f"Today is {day}, {date}"
         self.speak(result)
 
     # returns the time right now
     def current_time(self):
-        time_today = time.strftime("%I: %M %p")
+        time_today = strftime("%I: %M %p")
         result = f"It is {time_today}."
         self.speak(result)
 
@@ -168,14 +166,14 @@ class VoiceBot():
             city = self.user_says().capitalize()
             self.speak(f"Okay, one second.")
             complete_url = base_url + "appid=" + api_key + "&q=" + city
-            d = requests.get(complete_url)
+            d = get(complete_url)
             data = d.json()
             result = f"The temperature today in {city} is {round(data['main']['temp'] - 273, 2)} celcius.\n" \
                      f"The weather description is {data['weather'][0]['description']}."
             self.speak(result)
 
-        except speech_recognition.UnknownValueError:
-            recognizer = speech_recognition.Recognizer()
+        except UnknownValueError:
+            recognizer = Recognizer()
             self.speak("I did not understand you. Please try again!")
 
         except KeyError:
@@ -201,8 +199,8 @@ class VoiceBot():
                     done = True
                     self.speak(f"I successfully created the note {filename}")
 
-            except speech_recognition.UnknownValueError:
-                recognizer = speech_recognition.Recognizer()
+            except UnknownValueError:
+                recognizer = Recognizer()
                 self.speak("I did not understand you. Please try again!")
 
     # add item/s to the list
@@ -219,8 +217,8 @@ class VoiceBot():
                 done = True
                 self.speak(f"I added {item} to the to do list!")
 
-            except speech_recognition.UnknownValueError:
-                recognizer = speech_recognition.Recognizer()
+            except UnknownValueError:
+                recognizer = Recognizer()
                 self.speak("I did not understand you. Please try again!")
 
     # showing to do list
@@ -236,7 +234,7 @@ class VoiceBot():
     # exiting the program
     def quit(self):
         self.speak("Good bye! Have a nice day.")
-        sys.exit(0)
+        exit(0)
 
     # speaking the response from the datasets
     def response(self):

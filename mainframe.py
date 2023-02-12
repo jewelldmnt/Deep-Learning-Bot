@@ -11,14 +11,13 @@ from kivy.core.text import LabelBase
 from Seri.chatbotClass import Chatbot
 from Seri.voicebotClass import VoiceBot
 import openai
-import json
+from json import loads
 import os
-import speech_recognition
-
+from speech_recognition import UnknownValueError
 
 Window.size = (400, 560)
 # loading the dataset
-intents = json.loads(open('Seri/intents.json').read())
+intents = loads(open('Seri/intents.json').read())
 vb = VoiceBot()
 message = ''
 
@@ -28,6 +27,7 @@ with open("Seri/API.txt", "r") as file:
     os.environ['OPENAI_Key'] = API_openai
     openai.api_key = os.environ['OPENAI_Key']
     file.close()
+
 
 class ChatCommand(MDLabel):
     text = StringProperty()
@@ -53,8 +53,8 @@ class Bot(MDApp):
         global screen_manager
         screen_manager = ScreenManager()
         # screen_manager.add_widget(Builder.load_file("./StartpageScreen/Startpage.kv"))
-        #screen_manager.add_widget(Builder.load_file("./HomepageScreen/Homepage.kv"))
-        #screen_manager.add_widget(Builder.load_file("./ChatScreen/Chat.kv"))
+        # screen_manager.add_widget(Builder.load_file("./HomepageScreen/Homepage.kv"))
+        # screen_manager.add_widget(Builder.load_file("./ChatScreen/Chat.kv"))
         screen_manager.add_widget(Builder.load_file("./CallScreen/Call.kv"))
         return screen_manager
 
@@ -104,11 +104,30 @@ class Bot(MDApp):
 
         screen_manager.get_screen('chat').chat_list.add_widget(ChatResponse(text=res, size_hint_x=0.75))
 
-    def speakButton(self):
-        if not screen_manager.get_screen('call').button_speak.disabled:
-            screen_manager.get_screen('call').button_speak.disabled = True
+    # function to get the call response
+    def responseCall(self):
+        screen_manager.get_screen('call').image_speaking.opacity = 1
+
+        screen_manager.get_screen('call').button_speak.disabled = True
+        # predicting the intent of the message
+        ints = vb.predict_class(message)
+
+        # getting the highest intent probability
+        probability = float(ints[0]['probability'])
+
+        # comparing the probability to its threshold error
+        # if below uncertainty, get the response from openAI
+        if probability < 0.98:
+            res = openai.Completion.create(engine='text-davinci-003', prompt=message, max_tokens=200)
+            vb.speak(res['choices'][0]['text'])
+
+        # if above uncertainty, get the response from the intents.json dataset
         else:
-            screen_manager.get_screen('call').button_speak.disabled = False
+            if ints[0]['intent'] in vb.mappings.keys():
+                vb.mappings[ints[0]['intent']]()
+        screen_manager.get_screen('call').button_speak.disabled = False
+        screen_manager.get_screen('call').image_speaking.opacity = 0
+        screen_manager.get_screen('call').image_listening.opacity = 1
 
     # function to speak
     def say_something(self):
@@ -116,31 +135,11 @@ class Bot(MDApp):
         try:
             print("You may speak")
             message = vb.user_says()
-            self.speakButton()
             print(message)
-            # predicting the intent of the message
-            ints = vb.predict_class(message)
 
-            # getting the highest intent probability
-            probability = float(ints[0]['probability'])
-
-            # comparing the probability to its threshold error
-            # if below uncertainty, get the response from openAI
-            if probability < 0.98:
-                res = openai.Completion.create(engine='text-davinci-003', prompt=message, max_tokens=200)
-                vb.speak(res['choices'][0]['text'])
-
-            # if above uncertainty, get the response from the intents.json dataset
-            else:
-                if ints[0]['intent'] in vb.mappings.keys():
-                    vb.mappings[ints[0]['intent']]()
-            self.speakButton()
-
-        except speech_recognition.UnknownValueError:
-            recognizer = speech_recognition.Recognizer()
-            self.speakButton()
+        except UnknownValueError:
             vb.speak("I did not understand you. Please try again!")
-            self.speakButton()
+        screen_manager.get_screen('call').image_listening.opacity = 0
 
 
 if __name__ == '__main__':

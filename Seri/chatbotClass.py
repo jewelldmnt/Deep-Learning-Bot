@@ -1,23 +1,21 @@
-import random
-import json
-import pickle
-import numpy as np
-import requests
-import time
-import nltk
+from random import choice
+from json import loads
+from pickle import load
+from numpy import array
+from time import strftime
+from nltk import word_tokenize
 from nltk.stem import WordNetLemmatizer
-
 from keras.models import load_model
 
 # lemmatizer instantiation
 lemmatizer = WordNetLemmatizer()
 
 # storing the json file as a dictionary
-intents = json.loads(open('./Seri/intents.json').read())
+intents = loads(open('./Seri/intents.json').read())
 
 # storing the data into its variable
-words = pickle.load(open('./Seri/words.pkl', 'rb'))
-classes = pickle.load(open('./Seri/classes.pkl', 'rb'))
+words = load(open('./Seri/words.pkl', 'rb'))
+classes = load(open('./Seri/classes.pkl', 'rb'))
 model = load_model('./Seri/Seri_model.h5')
 
 
@@ -27,7 +25,7 @@ class Chatbot():
         pass
 
     def clean_up_sentence(self, sentence):
-        sentence_words = nltk.word_tokenize(sentence)
+        sentence_words = word_tokenize(sentence)
         sentence_words = [lemmatizer.lemmatize(word) for word in sentence_words]
         # returns list of words in a sentence
         return sentence_words
@@ -40,12 +38,12 @@ class Chatbot():
             for i, word in enumerate(words):
                 if word == w:
                     bag[i] = 1
-        return np.array(bag)
+        return array(bag)
 
     # probability of the class
     def predict_class(self, sentence):
         bow = self.bag_of_words(sentence)
-        res = model.predict(np.array([bow]))[0]
+        res = model.predict(array([bow]))[0]
         ERROR_THRESHOLD = 0.25
         # storing [index, class]
         results = [[i, r] for i, r in enumerate(res) if r > ERROR_THRESHOLD]
@@ -65,17 +63,17 @@ class Chatbot():
 
         for i in list_of_intents:
             if tag == 'date':
-                day = time.strftime("%A")
-                date = time.strftime("%B %d %Y")
+                day = strftime("%A")
+                date = strftime("%B %d %Y")
                 self.result = f"Today is {day}, {date}"
                 break
 
             elif tag == 'time':
-                time_today = time.strftime("%I: %M %p")
+                time_today = strftime("%I: %M %p")
                 self.result = f"It is {time_today}."
                 break
 
             elif i['tag'] == tag:
-                self.result = random.choice(i['responses'])
+                self.result = choice(i['responses'])
                 break
         return self.result
