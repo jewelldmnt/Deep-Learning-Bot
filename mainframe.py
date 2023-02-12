@@ -44,7 +44,6 @@ class ChatResponse(MDLabel):
     font_name = "./ChatScreen/assets/Kanit-Light.ttf"
     font_size = 15
 
-
 class Bot(MDApp):
     def change_screen(self, name):
         screen_manager.current = name
@@ -55,7 +54,10 @@ class Bot(MDApp):
         # screen_manager.add_widget(Builder.load_file("./StartpageScreen/Startpage.kv"))
         # screen_manager.add_widget(Builder.load_file("./HomepageScreen/Homepage.kv"))
         # screen_manager.add_widget(Builder.load_file("./ChatScreen/Chat.kv"))
-        screen_manager.add_widget(Builder.load_file("./CallScreen/Call.kv"))
+        # screen_manager.add_widget(Builder.load_file("./CallScreen/Call.kv"))
+        # screen_manager.add_widget(Builder.load_file("./SigninScreen/Signin.kv"))
+        # screen_manager.add_widget(Builder.load_file("./SignupScreen/Signup.kv"))
+        
         return screen_manager
 
     def sendChat(self):
