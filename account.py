@@ -63,7 +63,7 @@ def login(filename, email, pwd):
         # making a dictionary of email as key and password as value
         data = {}
         for line in file:
-            em, pw = line.split(", ")
+            em, pw, fn, api = line.split(", ")
             data[em] = pw.strip()
 
         # check if email is in the list of emails
@@ -78,3 +78,11 @@ def login(filename, email, pwd):
     # if file is empty then account does not exist
     file.close()
     return 1
+
+def getAPI(filename):
+    file = open(filename, "a")
+    file = open(filename, "r")
+    api = ''
+    for line in file:
+        em, pw, fn, api = line.split(", ")
+    return api.strip()
