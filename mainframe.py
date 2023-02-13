@@ -16,6 +16,7 @@ from json import loads
 import os
 from speech_recognition import UnknownValueError
 import account
+import sys
 
 # setting the window size of the screen
 Window.size = (400, 560)
@@ -67,27 +68,19 @@ class Bot(MDApp):
         global size, halign, input
         if screen_manager.get_screen('chat').text_input != "":
             input = screen_manager.get_screen('chat').text_input.text
-            if len(input) < 6:
-                size = .22
+            input = input.strip()
+            lines = input.split("\n")
+            max_len = max(len(line) for line in lines)
+
+            if max_len < 23:
+                size = (max_len * 13.6)/400
                 halign = "center"
-            elif len(input) < 11:
-                size = .32
-                halign = "center"
-            elif len(input) < 16:
-                size = .45
-                halign = "center"
-            elif len(input) < 21:
-                size = .58
-                halign = "center"
-            elif len(input) < 26:
-                size = .71
-                halign = "center"
+
             else:
-                size = .77
+                size = 0.782
                 halign = "left"
 
-            screen_manager.get_screen('chat').chat_list.add_widget(
-                ChatCommand(text=input, size_hint_x=size, halign=halign))
+            screen_manager.get_screen('chat').chat_list.add_widget(ChatCommand(text=input, size_hint_x=size, halign=halign))
             Clock.schedule_once(self.responseChat, 2)
             screen_manager.get_screen('chat').text_input.text = ""
 
@@ -112,7 +105,24 @@ class Bot(MDApp):
         else:
             res = cb.get_response(ints, intents)
 
-        screen_manager.get_screen('chat').chat_list.add_widget(ChatResponse(text=res, size_hint_x=0.75))
+        res = res.strip()
+        lines = res.split("\n")
+        line_count = len(res.splitlines())
+        max_len = max(len(line.strip()) for line in lines)
+
+        if max_len < 23 and line_count == 1:
+            size = (max_len * 13.6) / 400
+            halign = "center"
+
+        elif max_len < 23 and line_count > 1:
+            size = (max_len * 13.6) / 400
+            halign = "left"
+
+        else:
+            size = 0.782
+            halign = "left"
+
+        screen_manager.get_screen('chat').chat_list.add_widget(ChatResponse(text=res, size_hint_x=size, halign=halign))
 
     # function to get the call response
     def responseCall(self):
@@ -218,12 +228,20 @@ class Bot(MDApp):
             screen_manager.get_screen('signin').email.helper_text = "Account does not exist!"
             screen_manager.get_screen('signin').email.text = ""
 
-
         # account does not exist
         elif account.login(filename, email, password) == 2:
             screen_manager.get_screen('signin').password.required = True
             screen_manager.get_screen('signin').password.helper_text = "Incorrect Password!"
             screen_manager.get_screen('signin').password.text = ""
+
+    def exit(self):
+        sys.exit(0)
+
+    def back(self, screen, direction):
+        screen_manager.transition.direction = direction
+        screen_manager.current = screen
+        Bot().stop()
+        Bot().run()
 
 
 if __name__ == '__main__':

@@ -17,9 +17,7 @@ MDScreen:
             icon: "./ChatScreen/assets/button_back.png"
             pos: 8, 500
             icon_size: 30
-            on_release:
-                root.manager.transition.direction = "right"
-                root.manager.current = "startpage"
+            on_release: app.back("startpage", "right")
 
         MDFillRoundFlatIconButton:
             text: "SIGN UP  "
@@ -39,17 +37,6 @@ MDScreen:
             on_release:
                 root.manager.transition.direction = "left"
                 root.manager.current = "signin"
-
-        MDTextButton:
-            text: "(Click here to get the API)"
-            font_name: "./SignupScreen/assets/Kanit-Medium.ttf"
-            font_size: 10
-            pos: 80, 373
-            theme_text_color: "Custom"
-            text_color: "7B1D1D"
-            on_release:
-                import webbrowser
-                webbrowser.open('https://platform.openai.com/account/api-keys')
         
         MDTextField:
             id: first_name
@@ -80,3 +67,14 @@ MDScreen:
             font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
             size_hint: 0.7125, None
             pos: 57, 120
+
+        MDTextButton:
+            text: "(Click here to get the API)"
+            font_name: "./SignupScreen/assets/Kanit-Medium.ttf"
+            font_size: 10
+            pos: 80, 373
+            theme_text_color: "Custom"
+            text_color: "7B1D1D"
+            on_release:
+                import webbrowser
+                webbrowser.open('https://platform.openai.com/account/api-keys')
