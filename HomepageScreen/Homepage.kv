@@ -8,7 +8,7 @@ MDScreen:
             pos: 0, 0
 
     MDFillRoundFlatIconButton:
-        text: "     LET'S TEXT!    "
+        text: "     LET'S CHAT!    "
         icon: "./HomepageScreen/assets/text.png"
         icon_size: 40
         font_name: "./ChatScreen/assets/Kanit-Medium.ttf"
@@ -34,6 +34,14 @@ MDScreen:
         on_release:
             root.manager.transition.direction = "left"
             root.manager.current = "call"
+
+    MDIconButton:
+        icon: "./HomepageScreen/assets/bot.png"
+        pos: 20,200
+        icon_size: 175
+        on_release:
+            root.manager.transition.direction = "left"
+            root.manager.current = "about"
 
     MDIconButton:
         icon: "./HomepageScreen/assets/exit.png"

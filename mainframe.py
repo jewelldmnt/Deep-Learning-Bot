@@ -57,12 +57,14 @@ class Bot(MDApp):
     def build(self):
         global screen_manager
         screen_manager = ScreenManager()
-        screen_manager.add_widget(Builder.load_file("./StartpageScreen/Startpage.kv"))
+        #screen_manager.add_widget(Builder.load_file("./StartpageScreen/Startpage.kv"))
+        #screen_manager.add_widget(Builder.load_file("./SigninScreen/Signin.kv"))
+        #screen_manager.add_widget(Builder.load_file("./SignupScreen/Signup.kv"))
+        #screen_manager.add_widget(Builder.load_file("./GetAPIScreen/GetAPI.kv"))
         screen_manager.add_widget(Builder.load_file("./HomepageScreen/Homepage.kv"))
-        screen_manager.add_widget(Builder.load_file("./SigninScreen/Signin.kv"))
-        screen_manager.add_widget(Builder.load_file("./SignupScreen/Signup.kv"))
-        screen_manager.add_widget(Builder.load_file("./ChatScreen/Chat.kv"))
-        screen_manager.add_widget(Builder.load_file("./CallScreen/Call.kv"))
+        screen_manager.add_widget(Builder.load_file("./AboutScreen/About.kv"))
+        #screen_manager.add_widget(Builder.load_file("./ChatScreen/Chat.kv"))
+        #screen_manager.add_widget(Builder.load_file("./CallScreen/Call.kv"))
         return screen_manager
 
     # sending the user's chat message

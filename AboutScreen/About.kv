@@ -1,0 +1,13 @@
+MDScreen:
+    name: "about"
+    MDFloatLayout:
+        Image:
+            source: "./AboutScreen/assets/bg.png"
+            size_hint: 1, 1
+            pos: 0, 0
+
+        MDIconButton:
+            icon: "./ChatScreen/assets/button_back.png"
+            pos: 8, 494
+            icon_size: 30
+            on_release: app.back("homepage", "right")
