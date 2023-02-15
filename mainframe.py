@@ -8,7 +8,6 @@ from kivymd.uix.label import MDLabel
 from kivy.properties import StringProperty, NumericProperty
 from PIL import ImageFont
 
-
 # modules and libraries for the bot
 from speech_recognition import UnknownValueError
 from Seri.chatbotClass import Chatbot
@@ -52,13 +51,6 @@ class ChatResponse(MDLabel):
 
 
 class Bot(MDApp):
-    # define screens
-    chat_screen = screen_manager.get_screen('chat')
-    call_screen = screen_manager.get_screen('call')
-    start_screen = screen_manager.get_screen('startpage')
-    home_screen = screen_manager.get_screen('home')
-    signin_screen = screen_manager.get_screen('signin')
-    signup_screen = screen_manager.get_screen('signup')
 
     # for changing the current screen
     def change_screen(self, name):
@@ -66,7 +58,9 @@ class Bot(MDApp):
 
     # for building the screens
     def build(self):
-        global screen_manager
+        global screen_manager, chat_screen, call_screen, start_screen, home_screen, \
+            signin_screen, signup_screen, api_screen, about_screen
+
         screen_manager = ScreenManager()
         screen_manager.add_widget(Builder.load_file("./StartpageScreen/Startpage.kv"))
         screen_manager.add_widget(Builder.load_file("./HomepageScreen/Homepage.kv"))
@@ -76,13 +70,23 @@ class Bot(MDApp):
         screen_manager.add_widget(Builder.load_file("./SignupScreen/Signup.kv"))
         screen_manager.add_widget(Builder.load_file("./ChatScreen/Chat.kv"))
         screen_manager.add_widget(Builder.load_file("./CallScreen/Call.kv"))
+
+        # define screens
+        chat_screen = screen_manager.get_screen('chat')
+        call_screen = screen_manager.get_screen('call')
+        start_screen = screen_manager.get_screen('startpage')
+        home_screen = screen_manager.get_screen('homepage')
+        signin_screen = screen_manager.get_screen('signin')
+        signup_screen = screen_manager.get_screen('signup')
+        api_screen = screen_manager.get_screen('getAPI')
+        about_screen = screen_manager.get_screen('about')
         return screen_manager
 
     # sending the user's chat message
     def sendChat(self):
         # Define constants and get the user input
         global size, halign, user_message
-        text_input = self.chat_screen.text_input.text
+        text_input = chat_screen.text_input.text
         user_message = text_input.strip()
 
         # Check if the user input is not empty
@@ -98,14 +102,17 @@ class Bot(MDApp):
             halign = 'left' if input_box_width >= max_input_width else 'center'
 
             # Add the user's message to the chat list and schedule the chatbot's response
-            self.chat_screen.chat_list.add_widget(ChatCommand(text=user_message, size_hint_x=size, halign=halign))
+            chat_screen.chat_list.add_widget(ChatCommand(text=user_message, size_hint_x=size, halign=halign))
             Clock.schedule_once(self.responseChat, 2)
-            self.chat_screen.text_input.text = ''
+            chat_screen.text_input.text = ''
 
     # getting the bot's chat response
     def responseChat(self, *args):
+        email = signin_screen.email.text
+        password = signin_screen.password.text
+
         # API for openAI
-        API_openai = account.getAPI("credentials.txt")
+        API_openai = account.getAPI("credentials.txt", email, password)
         os.environ['OPENAI_Key'] = API_openai
         openai.api_key = os.environ['OPENAI_Key']
         cb = Chatbot()
@@ -147,17 +154,20 @@ class Bot(MDApp):
         halign = 'left' if res_box_width >= max_input_width else 'center'
 
         # Add the bot's message to the chat list
-        self.chat_screen.chat_list.add_widget(ChatResponse(text=res, size_hint_x=size, halign=halign))
+        chat_screen.chat_list.add_widget(ChatResponse(text=res, size_hint_x=size, halign=halign))
 
     # function to get the call response
     def responseCall(self):
-        # API for OpenAI
-        API_openai = account.getAPI("credentials.txt")
+        email = signin_screen.email.text
+        password = signin_screen.password.text
+
+        # API for openAI
+        API_openai = account.getAPI("credentials.txt", email, password)
         os.environ['OPENAI_Key'] = API_openai
         openai.api_key = os.environ['OPENAI_Key']
 
-        self.call_screen.image_speaking.opacity = 1
-        self.call_screen.button_speak.disabled = True
+        call_screen.image_speaking.opacity = 1
+        call_screen.button_speak.disabled = True
 
         # get the predicted intent and probability
         ints = vb.predict_class(message)
@@ -173,9 +183,9 @@ class Bot(MDApp):
             if ints[0]['intent'] in vb.mappings.keys():
                 vb.mappings[ints[0]['intent']]()
 
-        self.call_screen.button_speak.disabled = False
-        self.call_screen.image_speaking.opacity = 0
-        self.call_screen.image_listening.opacity = 1
+        call_screen.button_speak.disabled = False
+        call_screen.image_speaking.opacity = 0
+        call_screen.image_listening.opacity = 1
 
     # function to speak
     def say_something(self):
@@ -188,15 +198,15 @@ class Bot(MDApp):
         except UnknownValueError:
             vb.speak("I did not understand you. Please try again!")
 
-        self.chat_screen.image_listening.opacity = 0
+        chat_screen.image_listening.opacity = 0
 
     def checkInput(self):
         # get all necessary inputs
-        api_openai = self.signup_screen.api_oai.text
-        first_name = self.signup_screen.first_name.text
-        email = self.signup_screen.email.text
-        password = self.signup_screen.password.text
-        confirm_password = self.signup_screen.confirm_password.text
+        api_openai = signup_screen.api_oai.text
+        first_name = signup_screen.first_name.text
+        email = signup_screen.email.text
+        password = signup_screen.password.text
+        confirm_password = signup_screen.confirm_password.text
 
         # check if all inputs are not empty
         if all([first_name, api_openai, email, password, confirm_password]):
@@ -211,65 +221,103 @@ class Bot(MDApp):
         # Check the status and update the UI accordingly
         if sign_up_status == 4:
             # Clear all the input fields and move to the homepage screen
-            self.signup_screen.first_name.text = ""
-            self.signup_screen.email.text = ""
-            self.signup_screen.password.text = ""
-            self.signup_screen.confirm_password.text = ""
-            self.signup_screen.api_oai.text = ""
+            signup_screen.first_name.text = ""
+            signup_screen.email.text = ""
+            signup_screen.password.text = ""
+            signup_screen.confirm_password.text = ""
+            signup_screen.api_oai.text = ""
             screen_manager.transition.direction = "left"
             screen_manager.current = "homepage"
 
         elif sign_up_status == 1:
             # Display error message for email already exists
-            self.signup_screen.email.required = True
-            self.signup_screen.email.helper_text = "Email already exists!"
-            self.signup_screen.email.text = ""
+            signup_screen.email.required = True
+            signup_screen.email.helper_text = "Email already exists!"
+            signup_screen.email.text = ""
 
         elif sign_up_status == 2:
             # Display error message for passwords don't match
-            self.signup_screen.password.required = True
-            self.signup_screen.confirm_password.required = True
-            self.signup_screen.confirm_password.helper_text = "The Passwords don't match!"
-            self.signup_screen.password.text = ""
-            self.signup_screen.confirm_password.text = ""
+            signup_screen.password.required = True
+            signup_screen.confirm_password.required = True
+            signup_screen.confirm_password.helper_text = "The Passwords don't match!"
+            signup_screen.password.text = ""
+            signup_screen.confirm_password.text = ""
 
         elif sign_up_status == 3:
             # Display error message for invalid API
-            self.signup_screen.api_oai.required = True
-            self.signup_screen.api_oai.helper_text = "Invalid API"
-            self.signup_screen.api_oai.text = ""
+            signup_screen.api_oai.required = True
+            signup_screen.api_oai.helper_text = "Invalid API"
+            signup_screen.api_oai.text = ""
 
     # to sign in
     def sign_in(self):
         filename = "credentials.txt"
-        email = self.signin_screen.email.text
-        password = self.signin_screen.password.text
+        email = signin_screen.email.text
+        password = signin_screen.password.text
+        api_openai = account.getAPI("credentials.txt", email, password)
 
         # Get the sign-in status using the account.signin() function and store it in a variable
         login_status = account.login(filename, email, password)
 
-        if email and password and login_status == 3:
-            self.signin_screen.email.text = ""
-            self.signin_screen.password.text = ""
+        # invalid API but correct credentials
+        if login_status == 3 and not api_openai:
             screen_manager.transition.direction = "left"
-            screen_manager.current = "homepage"
+            screen_manager.current = "getAPI"
 
         # account does not exist
         elif login_status == 1:
-            self.signin_screen.email.required = True
-            self.signin_screen.email.helper_text = "Account does not exist!"
-            self.signin_screen.email.text = ""
+            signin_screen.email.required = True
+            signin_screen.email.helper_text = "Account does not exist!"
+            signin_screen.email.text = ""
 
         # incorrect password
         elif login_status == 2:
-            self.signin_screen.password.required = True
-            self.signin_screen.password.helper_text = "Incorrect Password!"
-            self.signin_screen.password.text = ""
+            signin_screen.password.required = True
+            signin_screen.password.helper_text = "Incorrect Password!"
+            signin_screen.password.text = ""
+
+        # logged in successfully
+        elif login_status == 3 and api_openai != 0:
+            signin_screen.email.text = ""
+            signin_screen.password.text = ""
+            screen_manager.transition.direction = "left"
+            screen_manager.current = "homepage"
+
+    def saveAPI(self):
+        email = signin_screen.email.text
+        password = signin_screen.password.text
+        api_openai = api_screen.get_api.text
+
+        if not account.isAPIvalid(api_openai):
+            api_screen.get_api.required = True
+            api_screen.get_api.helper_text = "Invalid API!"
+            api_screen.get_api.text = ""
+
+        else:
+
+            with open("credentials.txt", "r") as file:
+                contents = file.read()
+                lines = contents.splitlines()
+
+                for i, line in enumerate(lines):
+                    fields = line.split(",")
+
+                    if email and password in fields:
+                        fields[3] = api_openai
+                        lines[i] = ",".join(fields)
+
+            new_contents = "\n".join(lines)
+            with open("credentials.txt", "w") as file:
+                file.write(new_contents)
+
+            api_screen.get_api.text = ""
+            screen_manager.transition.direction = "left"
+            screen_manager.current = "homepage"
 
     def exit(self):
         sys.exit(0)
 
-    def back(self, screen, direction):
+    def sign_out(self, screen, direction):
         screen_manager.transition.direction = direction
         screen_manager.current = screen
         Bot().stop()

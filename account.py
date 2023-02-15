@@ -71,9 +71,22 @@ def login(filename, email, pwd):
         else:
             return 1
 
-def getAPI(filename):
+def getAPI(filename, email, password):
     with open(filename, "r") as file:
-        api_openai = next((line.split(", ")[-1]).strip() for line in file)
+        contents = file.read()
+        lines = contents.splitlines()
+        api_openai = ''
+
+        # Loop through each line and split it by comma
+        for line in lines:
+            fields = line.split(",")
+
+            # Check if "api" is one of the fields
+            if email in fields and password in fields:
+                # Get the value of "api" and print it
+                api_openai = fields[3]
+                break  # stop processing lines once "api" is found
+
         if isAPIvalid(api_openai) == 1:
             return api_openai
         else:
