@@ -4,6 +4,11 @@
   "responses":  ["Hello! I am Seri, what can I do for you?", "Hey! I am Seri, happy to be of assistance.", "Hi there, I am Seri at your service. Tell me how I can help."]
   },
 
+  {"tag":  "problem",
+  "patterns":  ["I have a problem", "I am having a problem"],
+  "responses":  ["I'm sorry to hear that. Can you please provide more details about the problem you are experiencing? I'm here to help and offer advices if I can."]
+  },
+
   {"tag":  "sad",
   "patterns":  ["I am sad", "I'm sad"],
   "responses":  ["I'm sorry to hear that you're feeling sad. Is there anything you'd like to talk about or share that might help you feel better? Sometimes it can be helpful to talk about your feelings and get them off your chest."]
