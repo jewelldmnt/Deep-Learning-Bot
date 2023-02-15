@@ -7,6 +7,8 @@ from kivy.uix.screenmanager import ScreenManager, FadeTransition
 from kivymd.uix.label import MDLabel
 from kivy.properties import StringProperty, NumericProperty
 from kivy.core.text import LabelBase
+from PIL import ImageFont
+
 
 # modules and libraries for the bot
 from Seri.chatbotClass import Chatbot
@@ -67,19 +69,16 @@ class Bot(MDApp):
     def sendChat(self):
         global size, halign, input
         if screen_manager.get_screen('chat').text_input != "":
-            input = screen_manager.get_screen('chat').text_input.text
-            input = input.strip()
-            lines = input.split("\n")
-            max_len = max(len(line) for line in lines)
-
-            if max_len < 23:
-                size = (max_len * 13.6)/400
-                halign = "center"
-
-            else:
+            input = screen_manager.get_screen('chat').text_input.text.strip()
+            font = ImageFont.truetype("./ChatScreen/assets/Kanit-Light.ttf", 15)  # choose your font and font size
+            bbox = font.getbbox(input)
+            input_width = ((bbox[2] - bbox[0]) + 40) / 400  # calculate the input's width
+            if input_width >= 0.782:
                 size = 0.782
-                halign = "left"
-
+                halign = 'left'
+            else:
+                size = input_width
+                halign = 'center'
             screen_manager.get_screen('chat').chat_list.add_widget(ChatCommand(text=input, size_hint_x=size, halign=halign))
             Clock.schedule_once(self.responseChat, 2)
             screen_manager.get_screen('chat').text_input.text = ""
@@ -107,20 +106,28 @@ class Bot(MDApp):
 
         res = res.strip()
         lines = res.split("\n")
-        line_count = len(res.splitlines())
-        max_len = max(len(line.strip()) for line in lines)
+        line_count = len(res.splitlines())       # count the number of lines
+        max_len = max(len(line.strip()) for line in lines)      # get the maximum len of string in a multiline response
+        max_res = ''
+        for line in lines:
+            if len(line) == max_len:
+                max_res = line
+                break
 
-        if max_len < 23 and line_count == 1:
-            size = (max_len * 13.6) / 400
-            halign = "center"
+        font = ImageFont.truetype("./ChatScreen/assets/Kanit-Light.ttf", 15)  # choose your font and font size
+        bbox = font.getbbox(max_res)
+        res_width = ((bbox[2] - bbox[0]) + 40) / 400  # calculate the response's width
+        if res_width < 0.782 and line_count > 1:
+            size = res_width
+            halign = 'left'
 
-        elif max_len < 23 and line_count > 1:
-            size = (max_len * 13.6) / 400
-            halign = "left"
+        elif res_width < 0.782 and line_count == 1:
+            size = res_width
+            halign = 'center'
 
         else:
             size = 0.782
-            halign = "left"
+            halign = 'left'
 
         screen_manager.get_screen('chat').chat_list.add_widget(ChatResponse(text=res, size_hint_x=size, halign=halign))
 

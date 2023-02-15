@@ -75,14 +75,14 @@ def login(filename, email, pwd):
             else:
                 return 2
 
+        else:
+            return 1
+
     # if file is empty then account does not exist
     file.close()
     return 1
 
 def getAPI(filename):
-    file = open(filename, "a")
-    file = open(filename, "r")
-    api = ''
-    for line in file:
-        em, pw, fn, api = line.split(", ")
-    return api.strip()
+    with open(filename, "r") as file:
+        return next((line.split(", ")[-1]).strip() for line in file)
+
