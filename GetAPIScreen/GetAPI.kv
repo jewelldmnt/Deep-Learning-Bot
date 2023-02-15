@@ -1,0 +1,40 @@
+MDScreen:
+    name: "getAPI"
+    get_api:get_api
+
+    MDFloatLayout:
+        Image:
+            source: "./GetAPIScreen/assets/bg.png"
+            size_hint: 1.1, 1
+            pos: -20, 0
+
+        MDIconButton:
+            icon: "./ChatScreen/assets/button_back.png"
+            pos: 8, 494
+            icon_size: 30
+            on_release: app.back("signin", "right")
+
+        MDTextField:
+            id: get_api
+            font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
+            size_hint: 0.8125, None
+            pos: 38, 90
+
+        MDTextButton:
+            text: "(Click here to get the API)"
+            font_name: "./SignupScreen/assets/Kanit-Medium.ttf"
+            font_size: 10
+            pos: 68, 144
+            theme_text_color: "Custom"
+            text_color: "7B1D1D"
+            on_release:
+                import webbrowser
+                webbrowser.open('https://platform.openai.com/account/api-keys')
+
+        MDFillRoundFlatIconButton:
+            text: "CONFIRM  "
+            font_name: "./SignupScreen/assets/Kanit-Medium.ttf"
+            font_size: 15
+            pos: 140, 25
+            md_bg_color: "842828"
+            on_release:
