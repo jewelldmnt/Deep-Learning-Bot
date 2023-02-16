@@ -12,7 +12,9 @@ MDScreen:
             icon: "./ChatScreen/assets/button_back.png"
             pos: 8, 494
             icon_size: 30
-            on_release: app.back("signin", "right")
+            on_release:
+                root.manager.transition.direction = "right"
+                root.manager.current = "signin"
 
         MDTextField:
             id: get_api

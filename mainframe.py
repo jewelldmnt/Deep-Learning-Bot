@@ -158,8 +158,12 @@ class Bot(MDApp):
 
     # function to get the call response
     def responseCall(self):
-        email = signin_screen.email.text
-        password = signin_screen.password.text
+        if signin_screen.email.text and signin_screen.password.text != "":
+            email = signin_screen.email.text
+            password = signin_screen.password.text
+        else:
+            email = signup_screen.email.text
+            password = signup_screen.password.text
 
         # API for openAI
         API_openai = account.getAPI("credentials.txt", email, password)
