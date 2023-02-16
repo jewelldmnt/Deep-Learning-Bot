@@ -15,6 +15,9 @@ MDScreen:
             icon: "./CallScreen/assets/button_end.png"
             pos: 95, 100
             icon_size: 80
+            on_release:
+                root.manager.transition.direction = "right"
+                root.manager.current = "homepage"
 
         Button:
             id: button_speak

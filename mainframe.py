@@ -198,7 +198,7 @@ class Bot(MDApp):
         except UnknownValueError:
             vb.speak("I did not understand you. Please try again!")
 
-        chat_screen.image_listening.opacity = 0
+        call_screen.image_listening.opacity = 0
 
     def checkInput(self):
         # get all necessary inputs
@@ -278,8 +278,6 @@ class Bot(MDApp):
 
         # logged in successfully
         elif login_status == 3 and api_openai != 0:
-            signin_screen.email.text = ""
-            signin_screen.password.text = ""
             screen_manager.transition.direction = "left"
             screen_manager.current = "homepage"
 

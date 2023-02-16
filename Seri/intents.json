@@ -11,7 +11,7 @@
 
   {"tag":  "sad",
   "patterns":  ["I am sad", "I'm sad"],
-  "responses":  ["I'm sorry to hear that you're feeling sad. Is there anything you'd like to talk about or share that might help you feel better? Sometimes it can be helpful to talk about your feelings and get them off your chest."]
+  "responses":  ["I'm sorry to hear that you're feeling sad. Is there anything you'd like to talk about or share that might help you feel better? Sometimes it can be helpful to talk about your feelings and get them off your chest.", "I'm sorry to hear that you're feeling sad. Here are a few things you can try that might help improve your mood:\n\nTalk to someone: Reach out to a friend or family member, or a mental health professional if you feel like you need additional support. Sometimes just talking about your feelings can help you feel better.\n\nPractice self-care: Do something that makes you feel good, such as taking a relaxing bath, going for a walk, or listening to music. Self-care is an important part of taking care of your mental health.\n\nGet moving: Exercise has been shown to boost mood and reduce symptoms of depression. You don't have to do anything too strenuous – even a short walk can help.\n\nWrite it down: Journaling can be a helpful way to process your emotions and work through difficult feelings.\n\nPractice mindfulness: Mindfulness practices, such as meditation or deep breathing, can help you stay present and focus on the present moment, which can help you feel calmer and more centered.\n\nRemember, it's okay to feel sad sometimes. Be kind to yourself and take things one step at a time. If your feelings persist or become overwhelming, don't hesitate to reach out for professional help."]
   },
 
   {"tag":  "name",
@@ -62,21 +62,6 @@
   {"tag":  "clever",
   "patterns":  ["You are very clever", "You are very intelligent", "You are a genius", "You are so smart"],
   "responses": ["Thank you, I was trained that way by the Intellitronix", "Thanks, I was trained that way by the Intellitronix", "Thank you, I was trained well by the Intellitronix"]
-  },
-
-  {"tag":  "help",
-  "patterns":  ["I need a hand", "I need help", "I need some help", "I need you to do something for me", "I need your help", "are you going to help me", "assist me", "can you help me", "can you assist me", "do me a favor", "do you want to help me", "help me", "need help"],
-  "responses": ["Sure. I'd be happy to help. What's up?", "I'm glad to help. What can I do for you?", "I'm happy to be of assistance. Just tell me what it is that you need.", "It's my pleasure to be of assistance. I'm at your service; tell me how I can help."]
-  },
-
-  {"tag":  "laugh",
-  "patterns":  ["haha", "hahaha", "lmao", "xd", "you are funny", "that's funny"],
-  "responses": ["Do you know that a person may benefit physically and mentally by laughing.", "You have a great laugh.", "I am glad you're having fun"]
-  },
-
-  {"tag": "appreciation",
-  "patterns":  ["I enjoy your company", "I enjoy talking to you", "I enjoy your presence", "It's been great talking with you", "I appreciate our conversation"],
-  "responses": ["Likewise!", "Feelings are mutual", "I enjoy talking to you as well", "I also appreciate our conversation", "It's been great talking with you"]
   }
 
 ]}
