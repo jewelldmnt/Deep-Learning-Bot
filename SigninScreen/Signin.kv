@@ -31,6 +31,12 @@ MDScreen:
             theme_text_color: "Custom"
             text_color: "842828"
             on_release:
+                email.helper_text = ""
+                email.text = ""
+                email.required = False
+                password.helper_text = ""
+                password.text = ""
+                password.required = False
                 root.manager.transition.direction = "right"
                 root.manager.current = "signup"
 

@@ -108,11 +108,15 @@ class Bot(MDApp):
 
     # getting the bot's chat response
     def responseChat(self, *args):
-        email = signin_screen.email.text
-        password = signin_screen.password.text
+        global size, halign
 
-        # API for openAI
-        API_openai = account.getAPI("credentials.txt", email, password)
+        if signin_screen.email.text and signin_screen.password.text != "":
+            email = signin_screen.email.text
+            password = signin_screen.password.text
+            API_openai = account.getAPI("credentials.txt", email, password)
+        else:
+            API_openai = signup_screen.api_oai.text
+
         os.environ['OPENAI_Key'] = API_openai
         openai.api_key = os.environ['OPENAI_Key']
         cb = Chatbot()
@@ -151,7 +155,12 @@ class Bot(MDApp):
         # Determine the size and horizontal alignment of the user's message
         max_input_width = 0.782
         size = max_input_width if res_box_width >= max_input_width else res_box_width
-        halign = 'left' if res_box_width >= max_input_width else 'center'
+        if res_box_width >= max_input_width:
+            halign = "left"
+        elif res_box_width < max_input_width and line_count > 1:
+            halign = "left"
+        else:
+            halign = "center"
 
         # Add the bot's message to the chat list
         chat_screen.chat_list.add_widget(ChatResponse(text=res, size_hint_x=size, halign=halign))
@@ -161,12 +170,10 @@ class Bot(MDApp):
         if signin_screen.email.text and signin_screen.password.text != "":
             email = signin_screen.email.text
             password = signin_screen.password.text
+            API_openai = account.getAPI("credentials.txt", email, password)
         else:
-            email = signup_screen.email.text
-            password = signup_screen.password.text
+            API_openai = signup_screen.api_oai.text
 
-        # API for openAI
-        API_openai = account.getAPI("credentials.txt", email, password)
         os.environ['OPENAI_Key'] = API_openai
         openai.api_key = os.environ['OPENAI_Key']
 
@@ -226,10 +233,7 @@ class Bot(MDApp):
         if sign_up_status == 4:
             # Clear all the input fields and move to the homepage screen
             signup_screen.first_name.text = ""
-            signup_screen.email.text = ""
-            signup_screen.password.text = ""
             signup_screen.confirm_password.text = ""
-            signup_screen.api_oai.text = ""
             screen_manager.transition.direction = "left"
             screen_manager.current = "homepage"
 
@@ -296,7 +300,6 @@ class Bot(MDApp):
             api_screen.get_api.text = ""
 
         else:
-
             with open("credentials.txt", "r") as file:
                 contents = file.read()
                 lines = contents.splitlines()
@@ -305,7 +308,7 @@ class Bot(MDApp):
                     fields = line.split(",")
 
                     if email and password in fields:
-                        fields[3] = api_openai
+                        fields[3] = f" {api_openai}"
                         lines[i] = ",".join(fields)
 
             new_contents = "\n".join(lines)

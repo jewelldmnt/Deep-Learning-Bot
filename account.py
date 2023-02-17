@@ -8,7 +8,9 @@ from requests import post
 def signup(filename, email, pwd, confirm_pwd, first_name, api_openai):
     # The email already exists
     with open(filename, "r") as file:
-        if any(email in line for line in file):
+        data = {line.split(", ")[0]: line.split(", ")[1].strip() for line in file}
+        # Check if email is in the list of emails
+        if email in data:
             return 1
 
     # Password and confirm password don't match
@@ -76,14 +78,14 @@ def getAPI(filename, email, password):
         contents = file.read()
         lines = contents.splitlines()
         api_openai = ''
+        # encode the password
+        auth_hash = hashlib.md5(password.encode()).hexdigest()
 
         # Loop through each line and split it by comma
         for line in lines:
-            fields = line.split(",")
-
-            # Check if "api" is one of the fields
-            if email in fields and password in fields:
-                # Get the value of "api" and print it
+            fields = line.split(", ")
+            # Check if account exists
+            if email == fields[0] and auth_hash == fields[1]:
                 api_openai = fields[3]
                 break  # stop processing lines once "api" is found
 
