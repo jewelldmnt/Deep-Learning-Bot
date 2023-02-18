@@ -84,6 +84,7 @@ class Bot(MDApp):
 
     # sending the user's chat message
     def sendChat(self):
+        global size, halign, user_message
         if signin_screen.email.text and signin_screen.password.text != "":
             email = signin_screen.email.text
             password = signin_screen.password.text
@@ -91,6 +92,27 @@ class Bot(MDApp):
             if account.isAPIvalid(API_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
+            else:
+                # Define constants and get the user input
+                text_input = chat_screen.text_input.text
+                user_message = text_input.strip()
+
+                # Check if the user input is not empty
+                if text_input != "":
+                    # Calculate the input box width based on the user input and font
+                    font = ImageFont.truetype("./ChatScreen/assets/Kanit-Light.ttf", 15)
+                    bbox = font.getbbox(user_message)
+                    input_box_width = ((bbox[2] - bbox[0]) + 40) / 400
+
+                    # Determine the size and horizontal alignment of the user's message
+                    max_input_width = 0.782
+                    size = max_input_width if input_box_width >= max_input_width else input_box_width
+                    halign = 'left' if input_box_width >= max_input_width else 'center'
+
+                    # Add the user's message to the chat list and schedule the chatbot's response
+                    chat_screen.chat_list.add_widget(ChatCommand(text=user_message, size_hint_x=size, halign=halign))
+                    Clock.schedule_once(self.responseChat, 2)
+                    chat_screen.text_input.text = ''
 
         else:
             email = signup_screen.email.text
@@ -99,28 +121,27 @@ class Bot(MDApp):
             if account.isAPIvalid(API_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
+            else:
+                # Define constants and get the user input
+                text_input = chat_screen.text_input.text
+                user_message = text_input.strip()
 
-        # Define constants and get the user input
-        global size, halign, user_message
-        text_input = chat_screen.text_input.text
-        user_message = text_input.strip()
+                # Check if the user input is not empty
+                if text_input != "":
+                    # Calculate the input box width based on the user input and font
+                    font = ImageFont.truetype("./ChatScreen/assets/Kanit-Light.ttf", 15)
+                    bbox = font.getbbox(user_message)
+                    input_box_width = ((bbox[2] - bbox[0]) + 40) / 400
 
-        # Check if the user input is not empty
-        if text_input != "":
-            # Calculate the input box width based on the user input and font
-            font = ImageFont.truetype("./ChatScreen/assets/Kanit-Light.ttf", 15)
-            bbox = font.getbbox(user_message)
-            input_box_width = ((bbox[2] - bbox[0]) + 40) / 400
+                    # Determine the size and horizontal alignment of the user's message
+                    max_input_width = 0.782
+                    size = max_input_width if input_box_width >= max_input_width else input_box_width
+                    halign = 'left' if input_box_width >= max_input_width else 'center'
 
-            # Determine the size and horizontal alignment of the user's message
-            max_input_width = 0.782
-            size = max_input_width if input_box_width >= max_input_width else input_box_width
-            halign = 'left' if input_box_width >= max_input_width else 'center'
-
-            # Add the user's message to the chat list and schedule the chatbot's response
-            chat_screen.chat_list.add_widget(ChatCommand(text=user_message, size_hint_x=size, halign=halign))
-            Clock.schedule_once(self.responseChat, 2)
-            chat_screen.text_input.text = ''
+                    # Add the user's message to the chat list and schedule the chatbot's response
+                    chat_screen.chat_list.add_widget(ChatCommand(text=user_message, size_hint_x=size, halign=halign))
+                    Clock.schedule_once(self.responseChat, 2)
+                    chat_screen.text_input.text = ''
 
     def apiValidation(self, screen, direction):
         if signin_screen.email.text and signin_screen.password.text != "":
@@ -156,6 +177,54 @@ class Bot(MDApp):
             if account.isAPIvalid(API_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
+            else:
+                os.environ['OPENAI_Key'] = API_openai
+                openai.api_key = os.environ['OPENAI_Key']
+                cb = Chatbot()
+
+                # get the predicted intent and probability
+                ints = cb.predict_class(user_message)
+                probability = float(ints[0]['probability'])
+
+                # check if probability is less than 0.99, get response from OpenAI
+                if probability < 0.99:
+                    res = openai.Completion.create(engine='text-davinci-003', prompt=user_message, max_tokens=200)
+                    res = res['choices'][0]['text']
+
+                else:
+                    # get response from intents.json dataset
+                    res = cb.get_response(ints, intents)
+
+                # clean the response
+                res = res.strip()
+                lines = res.split("\n")
+                line_count = len(lines)
+                max_len = max(len(line.strip()) for line in lines)
+                max_res = ''
+
+                # get the longest line in the response
+                for line in lines:
+                    if len(line) == max_len:
+                        max_res = line
+                        break
+
+                # calculate the size and alignment of the response text
+                font = ImageFont.truetype("./ChatScreen/assets/Kanit-Light.ttf", 15)
+                bbox = font.getbbox(max_res)
+                res_box_width = ((bbox[2] - bbox[0]) + 40) / 400
+
+                # Determine the size and horizontal alignment of the user's message
+                max_input_width = 0.782
+                size = max_input_width if res_box_width >= max_input_width else res_box_width
+                if res_box_width >= max_input_width:
+                    halign = "left"
+                elif res_box_width < max_input_width and line_count > 1:
+                    halign = "left"
+                else:
+                    halign = "center"
+
+                # Add the bot's message to the chat list
+                chat_screen.chat_list.add_widget(ChatResponse(text=res, size_hint_x=size, halign=halign))
 
         else:
             email = signup_screen.email.text
@@ -164,54 +233,54 @@ class Bot(MDApp):
             if account.isAPIvalid(API_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
+            else:
+                os.environ['OPENAI_Key'] = API_openai
+                openai.api_key = os.environ['OPENAI_Key']
+                cb = Chatbot()
 
-        os.environ['OPENAI_Key'] = API_openai
-        openai.api_key = os.environ['OPENAI_Key']
-        cb = Chatbot()
+                # get the predicted intent and probability
+                ints = cb.predict_class(user_message)
+                probability = float(ints[0]['probability'])
 
-        # get the predicted intent and probability
-        ints = cb.predict_class(user_message)
-        probability = float(ints[0]['probability'])
+                # check if probability is less than 0.99, get response from OpenAI
+                if probability < 0.99:
+                    res = openai.Completion.create(engine='text-davinci-003', prompt=user_message, max_tokens=200)
+                    res = res['choices'][0]['text']
 
-        # check if probability is less than 0.99, get response from OpenAI
-        if probability < 0.99:
-            res = openai.Completion.create(engine='text-davinci-003', prompt=user_message, max_tokens=200)
-            res = res['choices'][0]['text']
+                else:
+                    # get response from intents.json dataset
+                    res = cb.get_response(ints, intents)
 
-        else:
-            # get response from intents.json dataset
-            res = cb.get_response(ints, intents)
+                # clean the response
+                res = res.strip()
+                lines = res.split("\n")
+                line_count = len(lines)
+                max_len = max(len(line.strip()) for line in lines)
+                max_res = ''
 
-        # clean the response
-        res = res.strip()
-        lines = res.split("\n")
-        line_count = len(lines)
-        max_len = max(len(line.strip()) for line in lines)
-        max_res = ''
+                # get the longest line in the response
+                for line in lines:
+                    if len(line) == max_len:
+                        max_res = line
+                        break
 
-        # get the longest line in the response
-        for line in lines:
-            if len(line) == max_len:
-                max_res = line
-                break
+                # calculate the size and alignment of the response text
+                font = ImageFont.truetype("./ChatScreen/assets/Kanit-Light.ttf", 15)
+                bbox = font.getbbox(max_res)
+                res_box_width = ((bbox[2] - bbox[0]) + 40) / 400
 
-        # calculate the size and alignment of the response text
-        font = ImageFont.truetype("./ChatScreen/assets/Kanit-Light.ttf", 15)
-        bbox = font.getbbox(max_res)
-        res_box_width = ((bbox[2] - bbox[0]) + 40) / 400
+                # Determine the size and horizontal alignment of the user's message
+                max_input_width = 0.782
+                size = max_input_width if res_box_width >= max_input_width else res_box_width
+                if res_box_width >= max_input_width:
+                    halign = "left"
+                elif res_box_width < max_input_width and line_count > 1:
+                    halign = "left"
+                else:
+                    halign = "center"
 
-        # Determine the size and horizontal alignment of the user's message
-        max_input_width = 0.782
-        size = max_input_width if res_box_width >= max_input_width else res_box_width
-        if res_box_width >= max_input_width:
-            halign = "left"
-        elif res_box_width < max_input_width and line_count > 1:
-            halign = "left"
-        else:
-            halign = "center"
-
-        # Add the bot's message to the chat list
-        chat_screen.chat_list.add_widget(ChatResponse(text=res, size_hint_x=size, halign=halign))
+                # Add the bot's message to the chat list
+                chat_screen.chat_list.add_widget(ChatResponse(text=res, size_hint_x=size, halign=halign))
 
     # function to get the call response
     def responseCall(self):
@@ -222,6 +291,30 @@ class Bot(MDApp):
             if account.isAPIvalid(API_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
+            else:
+                os.environ['OPENAI_Key'] = API_openai
+                openai.api_key = os.environ['OPENAI_Key']
+
+                call_screen.image_speaking.opacity = 1
+                call_screen.button_speak.disabled = True
+
+                # get the predicted intent and probability
+                ints = vb.predict_class(message)
+                probability = float(ints[0]['probability'])
+
+                # check if probability is less than 0.99, get response from OpenAI
+                if probability < 0.99:
+                    res = openai.Completion.create(engine='text-davinci-003', prompt=message, max_tokens=200)
+                    vb.speak(res['choices'][0]['text'])
+
+                # if above uncertainty, get the response from the intents.json dataset
+                else:
+                    if ints[0]['intent'] in vb.mappings.keys():
+                        vb.mappings[ints[0]['intent']]()
+
+                call_screen.button_speak.disabled = False
+                call_screen.image_speaking.opacity = 0
+                call_screen.image_listening.opacity = 1
 
         else:
             email = signup_screen.email.text
@@ -230,33 +323,34 @@ class Bot(MDApp):
             if account.isAPIvalid(API_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
+            else:
+                os.environ['OPENAI_Key'] = API_openai
+                openai.api_key = os.environ['OPENAI_Key']
 
-        os.environ['OPENAI_Key'] = API_openai
-        openai.api_key = os.environ['OPENAI_Key']
+                call_screen.image_speaking.opacity = 1
+                call_screen.button_speak.disabled = True
 
-        call_screen.image_speaking.opacity = 1
-        call_screen.button_speak.disabled = True
+                # get the predicted intent and probability
+                ints = vb.predict_class(message)
+                probability = float(ints[0]['probability'])
 
-        # get the predicted intent and probability
-        ints = vb.predict_class(message)
-        probability = float(ints[0]['probability'])
+                # check if probability is less than 0.99, get response from OpenAI
+                if probability < 0.99:
+                    res = openai.Completion.create(engine='text-davinci-003', prompt=message, max_tokens=200)
+                    vb.speak(res['choices'][0]['text'])
 
-        # check if probability is less than 0.99, get response from OpenAI
-        if probability < 0.99:
-            res = openai.Completion.create(engine='text-davinci-003', prompt=message, max_tokens=200)
-            vb.speak(res['choices'][0]['text'])
+                # if above uncertainty, get the response from the intents.json dataset
+                else:
+                    if ints[0]['intent'] in vb.mappings.keys():
+                        vb.mappings[ints[0]['intent']]()
 
-        # if above uncertainty, get the response from the intents.json dataset
-        else:
-            if ints[0]['intent'] in vb.mappings.keys():
-                vb.mappings[ints[0]['intent']]()
-
-        call_screen.button_speak.disabled = False
-        call_screen.image_speaking.opacity = 0
-        call_screen.image_listening.opacity = 1
+                call_screen.button_speak.disabled = False
+                call_screen.image_speaking.opacity = 0
+                call_screen.image_listening.opacity = 1
 
     # function to speak
     def say_something(self):
+        global message
         if signin_screen.email.text and signin_screen.password.text != "":
             email = signin_screen.email.text
             password = signin_screen.password.text
@@ -264,6 +358,16 @@ class Bot(MDApp):
             if account.isAPIvalid(API_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
+            else:
+                print("You may speak")
+                try:
+                    message = vb.user_says()
+                    print(message)
+
+                except UnknownValueError:
+                    vb.speak("I did not understand you. Please try again!")
+
+                call_screen.image_listening.opacity = 0
 
         else:
             email = signup_screen.email.text
@@ -272,17 +376,16 @@ class Bot(MDApp):
             if account.isAPIvalid(API_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
+            else:
+                print("You may speak")
+                try:
+                    message = vb.user_says()
+                    print(message)
 
-        global message
-        print("You may speak")
-        try:
-            message = vb.user_says()
-            print(message)
+                except UnknownValueError:
+                    vb.speak("I did not understand you. Please try again!")
 
-        except UnknownValueError:
-            vb.speak("I did not understand you. Please try again!")
-
-        call_screen.image_listening.opacity = 0
+                call_screen.image_listening.opacity = 0
 
     def checkInput(self):
         # get all necessary inputs
@@ -393,6 +496,8 @@ class Bot(MDApp):
             new_contents = "\n".join(lines)
             with open("credentials.txt", "w") as file:
                 file.write(new_contents)
+            with open("credentials.txt", "a") as file:
+                file.write("\n")
 
             api_screen.get_api.text = ""
             screen_manager.transition.direction = "left"
