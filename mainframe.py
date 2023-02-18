@@ -93,7 +93,9 @@ class Bot(MDApp):
                 screen_manager.current = "getAPI"
 
         else:
-            API_openai = signup_screen.api_oai.text
+            email = signup_screen.email.text
+            password = signup_screen.password.text
+            API_openai = account.getAPI("credentials.txt", email, password)
             if account.isAPIvalid(API_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
@@ -133,7 +135,9 @@ class Bot(MDApp):
                 screen_manager.current = screen
 
         else:
-            API_openai = signup_screen.api_oai.text
+            email = signup_screen.email.text
+            password = signup_screen.password.text
+            API_openai = account.getAPI("credentials.txt", email, password)
             if account.isAPIvalid(API_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
@@ -154,7 +158,9 @@ class Bot(MDApp):
                 screen_manager.current = "getAPI"
 
         else:
-            API_openai = signup_screen.api_oai.text
+            email = signup_screen.email.text
+            password = signup_screen.password.text
+            API_openai = account.getAPI("credentials.txt", email, password)
             if account.isAPIvalid(API_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
@@ -218,7 +224,9 @@ class Bot(MDApp):
                 screen_manager.current = "getAPI"
 
         else:
-            API_openai = signup_screen.api_oai.text
+            email = signup_screen.email.text
+            password = signup_screen.password.text
+            API_openai = account.getAPI("credentials.txt", email, password)
             if account.isAPIvalid(API_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
@@ -258,7 +266,9 @@ class Bot(MDApp):
                 screen_manager.current = "getAPI"
 
         else:
-            API_openai = signup_screen.api_oai.text
+            email = signup_screen.email.text
+            password = signup_screen.password.text
+            API_openai = account.getAPI("credentials.txt", email, password)
             if account.isAPIvalid(API_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
