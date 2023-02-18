@@ -84,6 +84,20 @@ class Bot(MDApp):
 
     # sending the user's chat message
     def sendChat(self):
+        if signin_screen.email.text and signin_screen.password.text != "":
+            email = signin_screen.email.text
+            password = signin_screen.password.text
+            API_openai = account.getAPI("credentials.txt", email, password)
+            if account.isAPIvalid(API_openai) == 0:
+                screen_manager.transition.direction = "right"
+                screen_manager.current = "getAPI"
+
+        else:
+            API_openai = signup_screen.api_oai.text
+            if account.isAPIvalid(API_openai) == 0:
+                screen_manager.transition.direction = "right"
+                screen_manager.current = "getAPI"
+
         # Define constants and get the user input
         global size, halign, user_message
         text_input = chat_screen.text_input.text
@@ -106,6 +120,27 @@ class Bot(MDApp):
             Clock.schedule_once(self.responseChat, 2)
             chat_screen.text_input.text = ''
 
+    def apiValidation(self, screen, direction):
+        if signin_screen.email.text and signin_screen.password.text != "":
+            email = signin_screen.email.text
+            password = signin_screen.password.text
+            API_openai = account.getAPI("credentials.txt", email, password)
+            if account.isAPIvalid(API_openai) == 0:
+                screen_manager.transition.direction = "right"
+                screen_manager.current = "getAPI"
+            else:
+                screen_manager.transition.direction = direction
+                screen_manager.current = screen
+
+        else:
+            API_openai = signup_screen.api_oai.text
+            if account.isAPIvalid(API_openai) == 0:
+                screen_manager.transition.direction = "right"
+                screen_manager.current = "getAPI"
+            else:
+                screen_manager.transition.direction = direction
+                screen_manager.current = screen
+
     # getting the bot's chat response
     def responseChat(self, *args):
         global size, halign
@@ -114,8 +149,15 @@ class Bot(MDApp):
             email = signin_screen.email.text
             password = signin_screen.password.text
             API_openai = account.getAPI("credentials.txt", email, password)
+            if account.isAPIvalid(API_openai) == 0:
+                screen_manager.transition.direction = "right"
+                screen_manager.current = "getAPI"
+
         else:
             API_openai = signup_screen.api_oai.text
+            if account.isAPIvalid(API_openai) == 0:
+                screen_manager.transition.direction = "right"
+                screen_manager.current = "getAPI"
 
         os.environ['OPENAI_Key'] = API_openai
         openai.api_key = os.environ['OPENAI_Key']
@@ -171,8 +213,15 @@ class Bot(MDApp):
             email = signin_screen.email.text
             password = signin_screen.password.text
             API_openai = account.getAPI("credentials.txt", email, password)
+            if account.isAPIvalid(API_openai) == 0:
+                screen_manager.transition.direction = "right"
+                screen_manager.current = "getAPI"
+
         else:
             API_openai = signup_screen.api_oai.text
+            if account.isAPIvalid(API_openai) == 0:
+                screen_manager.transition.direction = "right"
+                screen_manager.current = "getAPI"
 
         os.environ['OPENAI_Key'] = API_openai
         openai.api_key = os.environ['OPENAI_Key']
@@ -200,6 +249,20 @@ class Bot(MDApp):
 
     # function to speak
     def say_something(self):
+        if signin_screen.email.text and signin_screen.password.text != "":
+            email = signin_screen.email.text
+            password = signin_screen.password.text
+            API_openai = account.getAPI("credentials.txt", email, password)
+            if account.isAPIvalid(API_openai) == 0:
+                screen_manager.transition.direction = "right"
+                screen_manager.current = "getAPI"
+
+        else:
+            API_openai = signup_screen.api_oai.text
+            if account.isAPIvalid(API_openai) == 0:
+                screen_manager.transition.direction = "right"
+                screen_manager.current = "getAPI"
+
         global message
         print("You may speak")
         try:
@@ -290,8 +353,14 @@ class Bot(MDApp):
             screen_manager.current = "homepage"
 
     def saveAPI(self):
-        email = signin_screen.email.text
-        password = signin_screen.password.text
+        if signin_screen.email.text and signin_screen.password.text != "":
+            email = signin_screen.email.text
+            password = signin_screen.password.text
+
+        else:
+            email = signup_screen.email.text
+            password = signup_screen.password.text
+
         api_openai = api_screen.get_api.text
 
         if not account.isAPIvalid(api_openai):

@@ -17,9 +17,8 @@ MDScreen:
         text_color: "4C4C4C"
         pos: 70, 120
         md_bg_color: 133/255, 199/255, 242/255
-        on_release:
-            root.manager.transition.direction = "left"
-            root.manager.current = "chat"
+        on_release: app.apiValidation("chat", "left")
+
 
     MDFillRoundFlatIconButton:
         text: "     LET'S TALK!    "
@@ -31,9 +30,8 @@ MDScreen:
         text_color: "4C4C4C"
         pos: 70, 40
         md_bg_color: 133/255, 199/255, 242/255
-        on_release:
-            root.manager.transition.direction = "left"
-            root.manager.current = "call"
+        on_release: app.apiValidation("call", "left")
+
 
     MDIconButton:
         icon: "./HomepageScreen/assets/bot.png"
