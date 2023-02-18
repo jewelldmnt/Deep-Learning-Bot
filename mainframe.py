@@ -92,6 +92,7 @@ class Bot(MDApp):
             if account.isAPIvalid(API_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
+                chat_screen.text_input.text = ''
             else:
                 # Define constants and get the user input
                 text_input = chat_screen.text_input.text
@@ -121,6 +122,7 @@ class Bot(MDApp):
             if account.isAPIvalid(API_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
+                chat_screen.text_input.text = ''
             else:
                 # Define constants and get the user input
                 text_input = chat_screen.text_input.text
