@@ -85,7 +85,7 @@ class Bot(MDApp):
     # sending the user's chat message
     def sendChat(self):
         global size, halign, user_message
-        if signin_screen.email.text and signin_screen.password.text != "":
+        if signin_screen.email.text != "" and signin_screen.password.text != "":
             email = signin_screen.email.text
             password = signin_screen.password.text
             API_openai = account.getAPI("credentials.txt", email, password)
@@ -115,11 +115,11 @@ class Bot(MDApp):
                     Clock.schedule_once(self.responseChat, 2)
                     chat_screen.text_input.text = ''
 
-        else:
-            email = signup_screen.email.text
-            password = signup_screen.password.text
-            API_openai = account.getAPI("credentials.txt", email, password)
-            if account.isAPIvalid(API_openai) == 0:
+        elif signup_screen.email.text != "" and signup_screen.password.text != "":
+            semail = signup_screen.email.text
+            spassword = signup_screen.password.text
+            sAPI_openai = account.getAPI("credentials.txt", semail, spassword)
+            if account.isAPIvalid(sAPI_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
                 chat_screen.text_input.text = ''
@@ -146,7 +146,7 @@ class Bot(MDApp):
                     chat_screen.text_input.text = ''
 
     def apiValidation(self, screen, direction):
-        if signin_screen.email.text and signin_screen.password.text != "":
+        if signin_screen.email.text != "" and signin_screen.password.text != "":
             email = signin_screen.email.text
             password = signin_screen.password.text
             API_openai = account.getAPI("credentials.txt", email, password)
@@ -157,11 +157,11 @@ class Bot(MDApp):
                 screen_manager.transition.direction = direction
                 screen_manager.current = screen
 
-        else:
-            email = signup_screen.email.text
-            password = signup_screen.password.text
-            API_openai = account.getAPI("credentials.txt", email, password)
-            if account.isAPIvalid(API_openai) == 0:
+        elif signup_screen.email.text != "" and signup_screen.password.text != "":
+            semail = signup_screen.email.text
+            spassword = signup_screen.password.text
+            sAPI_openai = account.getAPI("credentials.txt", semail, spassword)
+            if account.isAPIvalid(sAPI_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
             else:
@@ -172,7 +172,7 @@ class Bot(MDApp):
     def responseChat(self, *args):
         global size, halign
 
-        if signin_screen.email.text and signin_screen.password.text != "":
+        if signin_screen.email.text != "" and signin_screen.password.text != "":
             email = signin_screen.email.text
             password = signin_screen.password.text
             API_openai = account.getAPI("credentials.txt", email, password)
@@ -228,11 +228,11 @@ class Bot(MDApp):
                 # Add the bot's message to the chat list
                 chat_screen.chat_list.add_widget(ChatResponse(text=res, size_hint_x=size, halign=halign))
 
-        else:
-            email = signup_screen.email.text
-            password = signup_screen.password.text
-            API_openai = account.getAPI("credentials.txt", email, password)
-            if account.isAPIvalid(API_openai) == 0:
+        elif signup_screen.email.text != "" and signup_screen.password.text != "":
+            semail = signup_screen.email.text
+            spassword = signup_screen.password.text
+            sAPI_openai = account.getAPI("credentials.txt", semail, spassword)
+            if account.isAPIvalid(sAPI_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
             else:
@@ -286,7 +286,7 @@ class Bot(MDApp):
 
     # function to get the call response
     def responseCall(self):
-        if signin_screen.email.text and signin_screen.password.text != "":
+        if signin_screen.email.text != "" and signin_screen.password.text != "":
             email = signin_screen.email.text
             password = signin_screen.password.text
             API_openai = account.getAPI("credentials.txt", email, password)
@@ -318,11 +318,11 @@ class Bot(MDApp):
                 call_screen.image_speaking.opacity = 0
                 call_screen.image_listening.opacity = 1
 
-        else:
-            email = signup_screen.email.text
-            password = signup_screen.password.text
-            API_openai = account.getAPI("credentials.txt", email, password)
-            if account.isAPIvalid(API_openai) == 0:
+        elif signup_screen.email.text != "" and signup_screen.password.text != "":
+            semail = signup_screen.email.text
+            spassword = signup_screen.password.text
+            sAPI_openai = account.getAPI("credentials.txt", semail, spassword)
+            if account.isAPIvalid(sAPI_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
             else:
@@ -353,7 +353,7 @@ class Bot(MDApp):
     # function to speak
     def say_something(self):
         global message
-        if signin_screen.email.text and signin_screen.password.text != "":
+        if signin_screen.email.text != "" and signin_screen.password.text != "":
             email = signin_screen.email.text
             password = signin_screen.password.text
             API_openai = account.getAPI("credentials.txt", email, password)
@@ -371,11 +371,11 @@ class Bot(MDApp):
 
                 call_screen.image_listening.opacity = 0
 
-        else:
-            email = signup_screen.email.text
-            password = signup_screen.password.text
-            API_openai = account.getAPI("credentials.txt", email, password)
-            if account.isAPIvalid(API_openai) == 0:
+        elif signup_screen.email.text != "" and signup_screen.password.text != "":
+            semail = signup_screen.email.text
+            spassword = signup_screen.password.text
+            sAPI_openai = account.getAPI("credentials.txt", semail, spassword)
+            if account.isAPIvalid(sAPI_openai) == 0:
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
             else:
@@ -409,9 +409,6 @@ class Bot(MDApp):
 
         # Check the status and update the UI accordingly
         if sign_up_status == 4:
-            # Clear all the input fields and move to the homepage screen
-            signup_screen.first_name.text = ""
-            signup_screen.confirm_password.text = ""
             screen_manager.transition.direction = "left"
             screen_manager.current = "homepage"
 
