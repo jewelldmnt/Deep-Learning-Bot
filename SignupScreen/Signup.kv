@@ -11,8 +11,8 @@ MDScreen:
         md_bg_color: "#D7F6FD"
         Image:
             source: "./SignupScreen/assets/bg.png"
-            size_hint: 1.1, 1
-            pos: -20, 40
+            size_hint: 1, 1
+            pos: 0, 0
 
         MDIconButton:
             icon: "./ChatScreen/assets/button_back.png"
@@ -24,7 +24,7 @@ MDScreen:
             text: "SIGN UP  "
             font_name: "./SignupScreen/assets/Kanit-Medium.ttf"
             font_size: 15
-            pos: 140, 65
+            pos: 140, 30
             md_bg_color: "842828"
             on_release: app.checkInput()
 
@@ -32,7 +32,7 @@ MDScreen:
             text: "Sign in"
             font_name: "./SignupScreen/assets/Kanit-Medium.ttf"
             font_size: 10
-            pos: 240, 41
+            pos: 235, 8.8
             theme_text_color: "Custom"
             text_color: "842828"
             on_release:
@@ -43,38 +43,38 @@ MDScreen:
             id: first_name
             font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
             size_hint: 0.7125, None
-            pos: 57, 396
+            pos: 57, 366
 
         MDTextField:
             id: api_oai
             font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
             size_hint: 0.7125, None
-            pos: 57, 326
+            pos: 57, 296
 
         MDTextField:
             id: email
             font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
             size_hint: 0.7125, None
-            pos: 57, 258
+            pos: 57, 228
 
         MDTextField:
             id: password
             font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
             size_hint: 0.7125, None
-            pos: 57, 189
+            pos: 57, 159
             password: True
 
         MDTextField:
             id: confirm_password
             font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
             size_hint: 0.7125, None
-            pos: 57, 120
+            pos: 57, 90
             password: True
 
         MDCheckbox:
             size_hint: None, None
             size: 20, 20
-            pos: 57, 105
+            pos: 57, 77
             on_active: app.signup_show_password(*args)
 
         MDLabel:
@@ -82,14 +82,14 @@ MDScreen:
             text: "Show password"
             font_name: "./SigninScreen/assets/Kanit-Light.ttf"
             font_size: 10
-            pos: 83, -165
+            pos: 83, -193
 
 
         MDTextButton:
             text: "(Click here to get the API)"
             font_name: "./SignupScreen/assets/Kanit-Medium.ttf"
             font_size: 10
-            pos: 80, 373
+            pos: 80, 346.5
             theme_text_color: "Custom"
             text_color: "7B1D1D"
             on_release:
