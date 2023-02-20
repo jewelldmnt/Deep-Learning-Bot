@@ -85,7 +85,7 @@ class Bot(MDApp):
     # sending the user's chat message
     def sendChat(self):
         global size, halign, user_message
-        if signin_screen.email.text != "" and signin_screen.password.text != "":
+        if signin_screen.email.text and signin_screen.password.text:
             email = signin_screen.email.text
             password = signin_screen.password.text
             API_openai = account.getAPI("credentials.txt", email, password)
@@ -115,7 +115,7 @@ class Bot(MDApp):
                     Clock.schedule_once(self.responseChat, 2)
                     chat_screen.text_input.text = ''
 
-        elif signup_screen.email.text != "" and signup_screen.password.text != "":
+        else:
             semail = signup_screen.email.text
             spassword = signup_screen.password.text
             sAPI_openai = account.getAPI("credentials.txt", semail, spassword)
@@ -146,7 +146,7 @@ class Bot(MDApp):
                     chat_screen.text_input.text = ''
 
     def apiValidation(self, screen, direction):
-        if signin_screen.email.text != "" and signin_screen.password.text != "":
+        if signin_screen.email.text and signin_screen.password.text:
             email = signin_screen.email.text
             password = signin_screen.password.text
             API_openai = account.getAPI("credentials.txt", email, password)
@@ -157,7 +157,7 @@ class Bot(MDApp):
                 screen_manager.transition.direction = direction
                 screen_manager.current = screen
 
-        elif signup_screen.email.text != "" and signup_screen.password.text != "":
+        else:
             semail = signup_screen.email.text
             spassword = signup_screen.password.text
             sAPI_openai = account.getAPI("credentials.txt", semail, spassword)
@@ -171,8 +171,7 @@ class Bot(MDApp):
     # getting the bot's chat response
     def responseChat(self, *args):
         global size, halign
-
-        if signin_screen.email.text != "" and signin_screen.password.text != "":
+        if signin_screen.email.text and signin_screen.password.text:
             email = signin_screen.email.text
             password = signin_screen.password.text
             API_openai = account.getAPI("credentials.txt", email, password)
@@ -228,7 +227,7 @@ class Bot(MDApp):
                 # Add the bot's message to the chat list
                 chat_screen.chat_list.add_widget(ChatResponse(text=res, size_hint_x=size, halign=halign))
 
-        elif signup_screen.email.text != "" and signup_screen.password.text != "":
+        else:
             semail = signup_screen.email.text
             spassword = signup_screen.password.text
             sAPI_openai = account.getAPI("credentials.txt", semail, spassword)
@@ -236,7 +235,7 @@ class Bot(MDApp):
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
             else:
-                os.environ['OPENAI_Key'] = API_openai
+                os.environ['OPENAI_Key'] = sAPI_openai
                 openai.api_key = os.environ['OPENAI_Key']
                 cb = Chatbot()
 
@@ -286,7 +285,7 @@ class Bot(MDApp):
 
     # function to get the call response
     def responseCall(self):
-        if signin_screen.email.text != "" and signin_screen.password.text != "":
+        if signin_screen.email.text and signin_screen.password.text:
             email = signin_screen.email.text
             password = signin_screen.password.text
             API_openai = account.getAPI("credentials.txt", email, password)
@@ -318,7 +317,7 @@ class Bot(MDApp):
                 call_screen.image_speaking.opacity = 0
                 call_screen.image_listening.opacity = 1
 
-        elif signup_screen.email.text != "" and signup_screen.password.text != "":
+        else:
             semail = signup_screen.email.text
             spassword = signup_screen.password.text
             sAPI_openai = account.getAPI("credentials.txt", semail, spassword)
@@ -326,7 +325,7 @@ class Bot(MDApp):
                 screen_manager.transition.direction = "right"
                 screen_manager.current = "getAPI"
             else:
-                os.environ['OPENAI_Key'] = API_openai
+                os.environ['OPENAI_Key'] = sAPI_openai
                 openai.api_key = os.environ['OPENAI_Key']
 
                 call_screen.image_speaking.opacity = 1
@@ -353,7 +352,7 @@ class Bot(MDApp):
     # function to speak
     def say_something(self):
         global message
-        if signin_screen.email.text != "" and signin_screen.password.text != "":
+        if signin_screen.email.text and signin_screen.password.text:
             email = signin_screen.email.text
             password = signin_screen.password.text
             API_openai = account.getAPI("credentials.txt", email, password)
@@ -371,7 +370,7 @@ class Bot(MDApp):
 
                 call_screen.image_listening.opacity = 0
 
-        elif signup_screen.email.text != "" and signup_screen.password.text != "":
+        else:
             semail = signup_screen.email.text
             spassword = signup_screen.password.text
             sAPI_openai = account.getAPI("credentials.txt", semail, spassword)
@@ -510,6 +509,24 @@ class Bot(MDApp):
         screen_manager.current = screen
         Bot().stop()
         Bot().run()
+
+    def signin_show_password(self, checkbox, value):
+        if value:
+            signin_screen.password.password = False
+            signin_screen.password_text.text = "Hide password"
+        else:
+            signin_screen.password.password = True
+            signin_screen.password_text.text = "Show password"
+
+    def signup_show_password(self, checkbox, value):
+        if value:
+            signup_screen.password.password = False
+            signup_screen.confirm_password.password = False
+            signup_screen.password_text.text = "Hide password"
+        else:
+            signup_screen.password.password = True
+            signup_screen.confirm_password.password = True
+            signup_screen.password_text.text = "Show password"
 
 
 if __name__ == '__main__':

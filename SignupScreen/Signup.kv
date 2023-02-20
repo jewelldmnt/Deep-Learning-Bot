@@ -5,6 +5,7 @@ MDScreen:
     email: email
     password: password
     confirm_password: confirm_password
+    password_text: password_text
 
     MDFloatLayout:
         md_bg_color: "#D7F6FD"
@@ -23,7 +24,7 @@ MDScreen:
             text: "SIGN UP  "
             font_name: "./SignupScreen/assets/Kanit-Medium.ttf"
             font_size: 15
-            pos: 140, 75
+            pos: 140, 65
             md_bg_color: "842828"
             on_release: app.checkInput()
 
@@ -31,7 +32,7 @@ MDScreen:
             text: "Sign in"
             font_name: "./SignupScreen/assets/Kanit-Medium.ttf"
             font_size: 10
-            pos: 240, 51
+            pos: 240, 41
             theme_text_color: "Custom"
             text_color: "842828"
             on_release:
@@ -61,12 +62,28 @@ MDScreen:
             font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
             size_hint: 0.7125, None
             pos: 57, 189
+            password: True
 
         MDTextField:
             id: confirm_password
             font_name: "./SignupScreen/assets/Kanit-Regular.ttf"
             size_hint: 0.7125, None
             pos: 57, 120
+            password: True
+
+        MDCheckbox:
+            size_hint: None, None
+            size: 20, 20
+            pos: 57, 105
+            on_active: app.signup_show_password(*args)
+
+        MDLabel:
+            id: password_text
+            text: "Show password"
+            font_name: "./SigninScreen/assets/Kanit-Light.ttf"
+            font_size: 10
+            pos: 83, -165
+
 
         MDTextButton:
             text: "(Click here to get the API)"

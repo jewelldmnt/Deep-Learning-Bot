@@ -2,6 +2,8 @@ MDScreen:
     name: "signin"
     email: email
     password: password
+    password_text: password_text
+
     MDFloatLayout:
         md_bg_color: "#D7F6FD"
         Image:
@@ -19,7 +21,7 @@ MDScreen:
             text: "SIGN IN  "
             font_name: "./SigninScreen/assets/Kanit-Medium.ttf"
             font_size: 15
-            pos: 140, 114
+            pos: 140, 100
             md_bg_color: "842828"
             on_release: app.sign_in()
         
@@ -51,3 +53,17 @@ MDScreen:
             font_name: "./SigninScreen/assets/Kanit-Regular.ttf"
             size_hint: 0.7125, None
             pos: 57, 165
+            password: True
+
+        MDCheckbox:
+            size_hint: None, None
+            size: 20, 20
+            pos: 57, 150
+            on_active: app.signin_show_password(*args)
+
+        MDLabel:
+            id: password_text
+            text: "Show password"
+            font_name: "./SigninScreen/assets/Kanit-Light.ttf"
+            font_size: 10
+            pos: 83, -120
