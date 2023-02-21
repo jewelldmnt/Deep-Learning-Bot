@@ -17,6 +17,8 @@ import openai
 import os
 import account
 import sys
+import hashlib
+
 
 # Set the window size of the screen
 Window.size = (400, 560)
@@ -483,18 +485,18 @@ class Bot(MDApp):
             with open("credentials.txt", "r") as file:
                 contents = file.read()
                 lines = contents.splitlines()
+                auth_hash = hashlib.md5(password.encode()).hexdigest()
 
                 for i, line in enumerate(lines):
-                    fields = line.split(",")
+                    fields = line.split(", ")
 
-                    if email and password in fields:
-                        fields[3] = f" {api_openai}"
-                        lines[i] = ",".join(fields)
+                    if email == fields[0] and auth_hash == fields[1]:
+                        fields[3] = f"{api_openai}"
+                        lines[i] = ", ".join(fields)
 
             new_contents = "\n".join(lines)
             with open("credentials.txt", "w") as file:
                 file.write(new_contents)
-            with open("credentials.txt", "a") as file:
                 file.write("\n")
 
             api_screen.get_api.text = ""
